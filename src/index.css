@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@theme {
+  --color-oscar-dark-gold: #B6A068;
+  --color-oscar-light-gold: #D5BA62;
+  --color-oscar-red: #801B1D;
+  --color-oscar-emerald: #046852;
+  --color-oscar-lapis: #1C4F90;
+}
+
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
