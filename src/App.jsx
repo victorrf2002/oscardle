@@ -7,11 +7,24 @@ function GameBoard() {
   );
 }
 
+function Header() {
+  return (
+    <header>
+
+      {/* this is just a placeholder CHANGE AFTER */}
+      <p id='date'>APRIL 9, 2025</p> 
+
+      <button class="bg-amber-300">HOW TO PLAY</button>
+    </header>
+  );
+}
+
 function App() {
 
   return (
     <div>
-      <h1>Oscardle</h1>
+      <Header/>
+      <h1>OSCARDLE</h1>
       <GameBoard />
     </div>
     
