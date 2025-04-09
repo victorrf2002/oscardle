@@ -1,15 +1,14 @@
 
 import './App.css'
 
-function GameBoard() {
-  return (
-    <h1></h1>
-  );
+// Component for guess input
+function Guess() {
+
 }
 
 function Header() {
   return (
-    <header>
+    <header class="flex flex-row justify-between border-b-2 pb-2">
 
       {/* this is just a placeholder CHANGE AFTER */}
       <p id='date'>APRIL 9, 2025</p> 
@@ -25,7 +24,7 @@ function App() {
     <div>
       <Header/>
       <h1>OSCARDLE</h1>
-      <GameBoard />
+      <Guess />
     </div>
     
   );
