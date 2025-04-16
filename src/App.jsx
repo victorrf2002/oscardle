@@ -1,5 +1,23 @@
-
 import './App.css'
+
+function GuessAnswerRow() {
+  
+}
+
+function GuessCategoryRow() {
+
+}
+
+// Component for the whole Guess table section
+function GuessTable() {
+  return (
+    <div>
+      <GuessCategoryRow/>
+      <GuessAnswerRow/>
+    </div>
+    
+  )
+}
 
 // Component for guess input
 function GuessBar() {
@@ -34,6 +52,7 @@ function App() {
       <Header/>
       <h1>OSCARDLE</h1>
       <GuessBar />
+      <GuessTable/>
     </div>
     
   );
