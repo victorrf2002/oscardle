@@ -31,16 +31,19 @@ function GuessCategoryRow() {
 function GuessTable() {
   return (
 
-    <table>
-      <thead>
-        <GuessCategoryRow/>
-      </thead>
+    <div class="relative overflow-x-auto">
+      <table class=" mt-10 w-full text-left rtl:text-right text-lg table-auto">
+        <thead>
+          <GuessCategoryRow/>
+        </thead>
 
-      <tbody>
-        <GuessAnswerRow/>
-      </tbody>
+        <tbody>
+          <GuessAnswerRow/>
+        </tbody>
       
-    </table>
+      </table>
+    </div>
+    
     
   )
 }
@@ -49,7 +52,7 @@ function GuessTable() {
 function GuessBar() {
 
   return (
-      <form class="flex flex-row justify-center gap-2.5">
+      <form class="flex flex-row justify-center gap-2.5 mt-10">
         <input class="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
         <button class="bg-oscar-light-gold p-6 text-xl">OK</button>
       </form>
