@@ -2,7 +2,16 @@
 import './App.css'
 
 // Component for guess input
-function Guess() {
+function GuessBar() {
+
+  return (
+    <div>
+        <form>
+          <input name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+          <button>Ok</button>
+        </form>
+    </div>
+  )
 
 }
 
@@ -24,7 +33,7 @@ function App() {
     <div>
       <Header/>
       <h1>OSCARDLE</h1>
-      <Guess />
+      <GuessBar />
     </div>
     
   );
