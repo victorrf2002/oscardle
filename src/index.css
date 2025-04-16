@@ -6,6 +6,14 @@
   --color-oscar-red: #801B1D;
   --color-oscar-emerald: #046852;
   --color-oscar-lapis: #1C4F90;
+
+  --font-display: "League Spartan", "sans-serif"
+}
+
+:root {
+  background-color: black;
+  color: white;
+  font-family: "League Spartan", sans-serif;
 }
 
 /* :root {

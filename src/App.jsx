@@ -35,7 +35,7 @@ function GuessTable() {
       <thead>
         <GuessCategoryRow/>
       </thead>
-      
+
       <tbody>
         <GuessAnswerRow/>
       </tbody>
@@ -50,7 +50,7 @@ function GuessBar() {
 
   return (
       <form>
-        <input name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+        <input class="border-1" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
         <button>Ok</button>
       </form>
   )
@@ -59,12 +59,12 @@ function GuessBar() {
 
 function Header() {
   return (
-    <header class="flex flex-row justify-between border-b-2 pb-2">
+    <header class="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
 
       {/* this is just a placeholder CHANGE AFTER */}
-      <p id='date'>APRIL 9, 2025</p> 
+      <p id='date' class='mb-0'>APRIL 9, 2025</p> 
 
-      <button class="bg-amber-300">HOW TO PLAY</button>
+      <button class="bg-oscar-dark-gold px-4 mb-2">HOW TO PLAY</button>
     </header>
   );
 }
@@ -74,7 +74,7 @@ function App() {
   return (
     <div>
       <Header/>
-      <h1>OSCARDLE</h1>
+      <h1 class="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
       <GuessBar />
       <GuessTable/>
     </div>
