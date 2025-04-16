@@ -1,20 +1,46 @@
 import './App.css'
 
 function GuessAnswerRow() {
+ return(
+  <tr>
+    <td>The Social Network</td>
+    <td>David Fincher</td>
+    <td>2011</td>
+    <td>Best Director</td>
+    <td>Yes</td>
+  </tr> 
+ )
   
 }
 
 function GuessCategoryRow() {
 
+  return(
+        
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Director</th>
+      <th scope="col">Year</th>
+      <th scope="col">Nomination</th>
+      <th scope="col">Win</th>
+    </tr>
+  )
 }
 
 // Component for the whole Guess table section
 function GuessTable() {
   return (
-    <div>
-      <GuessCategoryRow/>
-      <GuessAnswerRow/>
-    </div>
+
+    <table>
+      <thead>
+        <GuessCategoryRow/>
+      </thead>
+      
+      <tbody>
+        <GuessAnswerRow/>
+      </tbody>
+      
+    </table>
     
   )
 }
@@ -23,12 +49,10 @@ function GuessTable() {
 function GuessBar() {
 
   return (
-    <div>
-        <form>
-          <input name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
-          <button>Ok</button>
-        </form>
-    </div>
+      <form>
+        <input name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+        <button>Ok</button>
+      </form>
   )
 
 }
