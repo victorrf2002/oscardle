@@ -49,9 +49,9 @@ function GuessTable() {
 function GuessBar() {
 
   return (
-      <form>
-        <input class="border-1" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
-        <button>Ok</button>
+      <form class="flex flex-row justify-center gap-2.5">
+        <input class="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+        <button class="bg-oscar-light-gold p-6 text-xl">OK</button>
       </form>
   )
 
