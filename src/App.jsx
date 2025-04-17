@@ -1,3 +1,15 @@
+/*
+  Nod to github.com/leandcesar for Academy Awards REST API 
+  https://github.com/leandcesar/theawards
+
+  For example, to get Best Picture nominees for 2011:
+  https://theawards.vercel.app/api/oscars/editions/83/categories/3636/nominees
+
+  ACTUALLY NEVERMIND USE THIS
+  https://github.com/delventhalz/json-nominations
+
+*/
+
 import './App.css'
 
 function GuessAnswerRow() {
