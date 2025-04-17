@@ -2,13 +2,26 @@ import './App.css'
 
 function GuessAnswerRow() {
  return(
-  <tr>
-    <td>The Social Network</td>
-    <td>David Fincher</td>
-    <td>2011</td>
-    <td>Best Director</td>
-    <td>Yes</td>
-  </tr> 
+  <tbody>
+    
+    <tr class=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+      <td class=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" class="w-30"></img></td>
+      <td class="px-6 py-4 bg-oscar-emerald">The Social Network</td>
+      <td class="px-6 py-4 bg-oscar-red">David Fincher</td>
+      <td class="px-6 py-4 bg-oscar-light-gold">2011</td>
+      <td class="px-6 py-4 bg-oscar-emerald">Best Director</td>
+      <td class="px-6 py-4 bg-oscar-red">Yes</td>
+    </tr>
+
+    <tr class=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+      <td class=""><img src="src/assets/uQ538BfYLDJh3GXlzRZLo0j7PFj.webp" class="w-30"></img></td>
+      <td class="px-6 py-4 bg-oscar-emerald">The King's Speech</td>
+      <td class="px-6 py-4 bg-oscar-emerald">Tom Hooper</td>
+      <td class="px-6 py-4 bg-oscar-emerald">2011</td>
+      <td class="px-6 py-4 bg-oscar-emerald">Best Picture</td>
+      <td class="px-6 py-4 bg-oscar-emerald">Yes</td>
+    </tr>
+  </tbody>
  )
   
 }
@@ -18,11 +31,12 @@ function GuessCategoryRow() {
   return(
         
     <tr>
-      <th scope="col">Title</th>
-      <th scope="col">Director</th>
-      <th scope="col">Year</th>
-      <th scope="col">Nomination</th>
-      <th scope="col">Win</th>
+      <th scope="col" class="w-20"></th>
+      <th scope="col" class="px-6 py-3">Title</th>
+      <th scope="col" class="px-6 py-3">Director</th>
+      <th scope="col" class="px-6 py-3">Year</th>
+      <th scope="col" class="px-6 py-3">Nomination</th>
+      <th scope="col" class="px-6 py-3">Win</th>
     </tr>
   )
 }
@@ -32,14 +46,12 @@ function GuessTable() {
   return (
 
     <div class="relative overflow-x-auto">
-      <table class=" mt-10 w-full text-left rtl:text-right text-lg table-auto">
-        <thead>
+      <table class=" mt-10 w-full text-left rtl:text-right text-lg table-auto ">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
           <GuessCategoryRow/>
         </thead>
 
-        <tbody>
-          <GuessAnswerRow/>
-        </tbody>
+        <GuessAnswerRow/>
       
       </table>
     </div>
