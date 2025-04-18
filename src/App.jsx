@@ -7,15 +7,39 @@
 
   ACTUALLY NEVERMIND USE THIS
   https://github.com/delventhalz/json-nominations
+  along with TMBD API not IMBD
 
 */
 
-import './App.css'
+import './App.css';
+import oscarData from "./data/oscar-nominations.json";
+
+const randomMovie = oscarData[0]; // getting movie nomination from json data file
+const tmbd = randomMovie.movies[0].tmdb_id;
+const movie = randomMovie.movies[0].title;
+// const director = USE TMBD
+const year = randomMovie.year;
+const category = randomMovie.category;
+const win = randomMovie.won;
+
+console.log(movie);
+console.log(tmbd);
+console.log(year);
+console.log(category);
+console.log("Win: " + win);
 
 function GuessAnswerRow() {
  return(
   <tbody>
-    
+    <tr class=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+      <td class=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" class="w-30"></img></td>
+      <td class="px-6 py-4 bg-oscar-emerald">The Social Network</td>
+      <td class="px-6 py-4 bg-oscar-red">David Fincher</td>
+      <td class="px-6 py-4 bg-oscar-light-gold">2011</td>
+      <td class="px-6 py-4 bg-oscar-emerald">Best Director</td>
+      <td class="px-6 py-4 bg-oscar-red">Yes</td>
+    </tr>
+
     <tr class=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
       <td class=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" class="w-30"></img></td>
       <td class="px-6 py-4 bg-oscar-emerald">The Social Network</td>
