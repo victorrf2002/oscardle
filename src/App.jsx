@@ -1,14 +1,7 @@
 /*
-  Nod to github.com/leandcesar for Academy Awards REST API 
-  https://github.com/leandcesar/theawards
-
-  For example, to get Best Picture nominees for 2011:
-  https://theawards.vercel.app/api/oscars/editions/83/categories/3636/nominees
-
   ACTUALLY NEVERMIND USE THIS
   https://github.com/delventhalz/json-nominations
-  along with TMBD API not IMBD
-
+  along with TMBD API
 */
 
 import './App.css';
@@ -17,7 +10,7 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 
 
-
+// Component for the answers rows
 function GuessAnswerRow() {
  return(
   <tbody>
@@ -52,6 +45,7 @@ function GuessAnswerRow() {
   
 }
 
+// Component for the category row
 function GuessCategoryRow() {
 
   return(
@@ -98,6 +92,7 @@ function GuessBar() {
 
 }
 
+// Component for header
 function Header() {
   return (
     <header class="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
@@ -110,18 +105,22 @@ function Header() {
   );
 }
 
+// Main component
 function App() {
   const [movieCredits, setMovieCredits] = useState(null);
   const [moviePosterPath, setMoviePosterPath] = useState(null);
 
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
-  const randomMovie = oscarData[0]; // getting movie nomination from json data file
-  const tmdbId = randomMovie.movies[0].tmdb_id;
-  const movie = randomMovie.movies[0].title;
-  const year = randomMovie.year;
-  const category = randomMovie.category;
-  const win = randomMovie.won;
+  let randomMovie = oscarData[0]; // getting movie nomination from json data file
+
+  
+
+  let tmdbId = randomMovie.movies[0].tmdb_id;
+  let movie = randomMovie.movies[0].title;
+  let year = randomMovie.year;
+  let category = randomMovie.category;
+  let win = randomMovie.won;
   
   console.log(tmdbId);
 
@@ -149,7 +148,7 @@ function App() {
   }, []);
 
   const director = (movieCredits && movieCredits.crew.find((element) => element.job === 'Director').name);
-  const moviePoster = (movieCredits && 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path);
+  const moviePoster = (movieCredits && 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path); // Link to movie poster
 
   console.log(moviePoster);
   console.log(movie);
@@ -158,6 +157,7 @@ function App() {
   console.log(category);
   console.log("Win: " + win);
 
+ 
 
 
   return (
