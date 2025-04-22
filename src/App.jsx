@@ -111,24 +111,49 @@ function Header() {
 }
 
 function App() {
-  const [movieData, setMovieData] = useState([]);
+  const [movieCredits, setMovieCredits] = useState(null);
+  const [moviePosterPath, setMoviePosterPath] = useState(null);
 
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
   const randomMovie = oscarData[0]; // getting movie nomination from json data file
-  const tmbdId = randomMovie.movies[0].tmdb_id;
+  const tmdbId = randomMovie.movies[0].tmdb_id;
   const movie = randomMovie.movies[0].title;
-  // const director = USE TMBD
   const year = randomMovie.year;
   const category = randomMovie.category;
   const win = randomMovie.won;
   
+  console.log(tmdbId);
+
+  // Fetch movie director from TMDB
   useEffect(() => {
-    fetch(`https://api.themoviedb.org/3/movie/${tmbdId}?api_key=${apiKey}`)
+    fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/credits?api_key=${apiKey}`)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        // console.log(data);
+        setMovieCredits(data);
+      });
   }, []);
 
+  // Fetch movie poster path from TMDB
+  useEffect(() => {
+    fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/images?api_key=${apiKey}`)
+      .then(res => {
+        return res.json()
+      })
+      .then(data => {
+        setMoviePosterPath(data);
+      });
+  }, []);
+
+  const director = (movieCredits && movieCredits.crew.find((element) => element.job === 'Director').name);
+  const moviePoster = (movieCredits && 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path);
+
+  console.log(moviePoster);
   console.log(movie);
-  console.log(tmbdId);
+  console.log(director);
   console.log(year);
   console.log(category);
   console.log("Win: " + win);
