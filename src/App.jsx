@@ -13,20 +13,10 @@
 
 import './App.css';
 import oscarData from "./data/oscar-nominations.json";
+import {useEffect, useState} from 'react';
+import axios from 'axios';
 
-const randomMovie = oscarData[0]; // getting movie nomination from json data file
-const tmbd = randomMovie.movies[0].tmdb_id;
-const movie = randomMovie.movies[0].title;
-// const director = USE TMBD
-const year = randomMovie.year;
-const category = randomMovie.category;
-const win = randomMovie.won;
 
-console.log(movie);
-console.log(tmbd);
-console.log(year);
-console.log(category);
-console.log("Win: " + win);
 
 function GuessAnswerRow() {
  return(
@@ -121,6 +111,29 @@ function Header() {
 }
 
 function App() {
+  const [movieData, setMovieData] = useState([]);
+
+  const apiKey = import.meta.env.VITE_TMDB_API_KEY;
+
+  const randomMovie = oscarData[0]; // getting movie nomination from json data file
+  const tmbdId = randomMovie.movies[0].tmdb_id;
+  const movie = randomMovie.movies[0].title;
+  // const director = USE TMBD
+  const year = randomMovie.year;
+  const category = randomMovie.category;
+  const win = randomMovie.won;
+  
+  useEffect(() => {
+    fetch(`https://api.themoviedb.org/3/movie/${tmbdId}?api_key=${apiKey}`)
+  }, []);
+
+  console.log(movie);
+  console.log(tmbdId);
+  console.log(year);
+  console.log(category);
+  console.log("Win: " + win);
+
+
 
   return (
     <div>
