@@ -7,7 +7,7 @@
 import './App.css';
 import oscarData from "./data/oscar-nominations.json";
 import {useEffect, useState} from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 
 // Component for the answers rows
@@ -112,15 +112,31 @@ function App() {
 
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
-  let randomMovie = oscarData[0]; // getting movie nomination from json data file
+  const arrayLength = oscarData.length;
 
+  // Get today's date and hash it to get random seed
+  function getDateHashIndex(arrayLength) {
+    const today = new Date().toISOString().split('T')[0];
+    // const today = '2025-04-29';
+    let hash = 0;
+
+    for(let i = 0; i < today.length; i++) {
+      hash = today.charCodeAt(i) + ((hash < 5) - hash);
+      hash = hash & hash;
+    }
+      
+    return Math.abs(hash) % arrayLength;
+  }
+
+  const index = getDateHashIndex(oscarData.length);
+  const randomMovie = oscarData[index]; // getting random oscar nomination from json file given the seed
   
 
-  let tmdbId = randomMovie.movies[0].tmdb_id;
-  let movie = randomMovie.movies[0].title;
-  let year = randomMovie.year;
-  let category = randomMovie.category;
-  let win = randomMovie.won;
+  const tmdbId = randomMovie.movies[0].tmdb_id;
+  const movie = randomMovie.movies[0].title;
+  const year = randomMovie.year;
+  const category = randomMovie.category;
+  const win = randomMovie.won;
   
   console.log(tmdbId);
 
