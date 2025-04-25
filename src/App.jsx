@@ -117,11 +117,11 @@ function App() {
   // Get today's date and hash it to get random seed
   function getDateHashIndex(arrayLength) {
     const today = new Date().toISOString().split('T')[0];
-    // const today = '2025-04-29';
+    // const today = '2025-04-26';
     let hash = 0;
 
     for(let i = 0; i < today.length; i++) {
-      hash = today.charCodeAt(i) + ((hash < 5) - hash);
+      hash = today.charCodeAt(i) + ((hash << 5) - hash);
       hash = hash & hash;
     }
       
@@ -129,6 +129,7 @@ function App() {
   }
 
   const index = getDateHashIndex(oscarData.length);
+  console.log("index: " + index);
   const randomMovie = oscarData[index]; // getting random oscar nomination from json file given the seed
   
 
