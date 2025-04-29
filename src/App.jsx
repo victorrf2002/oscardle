@@ -185,15 +185,38 @@ function App() {
   console.log(category);
   console.log("Win: " + win);
 
+  // status is either green, yellow, or red.
+  var status = null;
+
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess) => {
     if(userGuess.toLowerCase() === movie.toLowerCase()) {
       console.log("Correct!");
+      // ADD FUNCTION FOR WIN
+    }
+    else if (oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase())) {
+      console.log("Try again.");
+      // ADD FUNCTION FOR IF MOVIE IS NOT THE RIGHT ONE BUT IS NOMINATED
+      checkStatus(userGuess);
+      
     }
     else {
-      console.log("Try Again.");
+      console.log("Invalid Guess (movie not nominated)");
     }
   };
+
+  function checkStatus(userGuess) {
+    // userGuess's title status = red
+
+    // if userGuess's director = movie's director then userGuess's director status = green.
+    // OR else red
+
+    // if userGuess's year = movie's year then userGuess's year status = green.
+    // OR else if userGuess's year > movie's year - 5 OR < movie's year + 5 then status = yellow.
+    // OR else red.
+
+    // Same idea for nomination and win
+  }
 
   return (
     <div>
