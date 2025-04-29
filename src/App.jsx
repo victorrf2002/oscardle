@@ -83,8 +83,13 @@ function GuessTable() {
 // Component for guess input
 function GuessBar() {
 
+  function guess(formData) {
+    const guessInput = formData.get('guess-input');
+    console.log(`User guess: ${guessInput}`);
+  }
+
   return (
-      <form class="flex flex-row justify-center gap-2.5 mt-10">
+      <form action={guess} class="flex flex-row justify-center gap-2.5 mt-10">
         <input class="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
         <button class="bg-oscar-light-gold p-6 text-xl">OK</button>
       </form>
@@ -139,7 +144,7 @@ function App() {
   const category = randomMovie.category;
   const win = randomMovie.won;
   
-  console.log(tmdbId);
+  console.log("Id: " + tmdbId);
 
   // Fetch movie director from TMDB
   useEffect(() => {
