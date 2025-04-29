@@ -80,18 +80,24 @@ function GuessTable() {
   )
 }
 
-// Component for guess input
-function GuessBar() {
+// Component for guess input taking the onGuessSubmit function from App as a prop
+function GuessBar({onGuessSubmit}) {
 
-  function guess(formData) {
-    const guessInput = formData.get('guess-input');
-    console.log(`User guess: ${guessInput}`);
+  const[input, setInput] = useState('');
+
+  // setting onGuessSubmit as the user's input
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onGuessSubmit(input);
+    setInput("");
   }
 
+ 
+
   return (
-      <form action={guess} class="flex flex-row justify-center gap-2.5 mt-10">
-        <input class="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
-        <button class="bg-oscar-light-gold p-6 text-xl">OK</button>
+      <form onSubmit={handleSubmit} class="flex flex-row justify-center gap-2.5 mt-10">
+        <input value={input} onChange={(e) => setInput(e.target.value)} class="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+        <button type='submit' class="bg-oscar-light-gold p-6 text-xl">OK</button>
       </form>
   )
 
@@ -179,14 +185,21 @@ function App() {
   console.log(category);
   console.log("Win: " + win);
 
- 
-
+  // Handle the user's guess to see if it matches the movie
+  const handleGuess = (userGuess) => {
+    if(userGuess.toLowerCase() === movie.toLowerCase()) {
+      console.log("Correct!");
+    }
+    else {
+      console.log("Try Again.");
+    }
+  };
 
   return (
     <div>
       <Header/>
       <h1 class="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
-      <GuessBar />
+      <GuessBar onGuessSubmit={handleGuess}/> 
       <GuessTable/>
     </div>
     
