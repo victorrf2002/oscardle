@@ -187,6 +187,11 @@ function App() {
 
   // status is either green, yellow, or red.
   var status = null;
+  var titleStatus = null;
+  var directorStatus = null;
+  var yearStatus = null;
+  var categoryStatus = null;
+  var winStatus = null;
 
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess) => {
@@ -197,6 +202,18 @@ function App() {
     else if (oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase())) {
       console.log("Try again.");
       // ADD FUNCTION FOR IF MOVIE IS NOT THE RIGHT ONE BUT IS NOMINATED
+
+      // Fetch userGuess's movie info
+      var guessMovie = oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase());
+
+      var guessTitle = guessMovie.movies[0].title;
+      var guessTmbdId = guessMovie.movies[0].tmdb_id;
+      var guessYear = guessMovie.year;
+      var guessCategory = guessMovie.category;
+      var guessWin = guessMovie.won;
+
+      console.log("Movie guess: " + guessTitle+ ". ID: " + guessTmbdId + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ".");
+
       checkStatus(userGuess);
       
     }
@@ -207,6 +224,7 @@ function App() {
 
   function checkStatus(userGuess) {
     // userGuess's title status = red
+    titleStatus = 'red';
 
     // if userGuess's director = movie's director then userGuess's director status = green.
     // OR else red
