@@ -1,5 +1,4 @@
 /*
-  ACTUALLY NEVERMIND USE THIS
   https://github.com/delventhalz/json-nominations
   along with TMBD API
 */
@@ -185,6 +184,26 @@ function App() {
   console.log(category);
   console.log("Win: " + win);
 
+  // Handle the user's guess to see if it matches the movie
+  const handleGuess = (userGuess) => {
+
+    if(userGuess.toLowerCase() === movie.toLowerCase()) {
+      console.log("Correct!");
+      // ADD FUNCTION FOR WIN
+    }
+    else if (oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase())) {
+      console.log("Try again.");
+
+      const guessMovie = oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase());
+
+      setGuessTmdbId(guessMovie.movies[0].tmdb_id);
+      
+    }
+    else {
+      console.log("Invalid Guess (movie not nominated)");
+    }
+  };
+
   // status is either green, yellow, or red.
   var status = null;
   var titleStatus = null;
@@ -193,34 +212,58 @@ function App() {
   var categoryStatus = null;
   var winStatus = null;
 
-  // Handle the user's guess to see if it matches the movie
-  const handleGuess = (userGuess) => {
-    if(userGuess.toLowerCase() === movie.toLowerCase()) {
-      console.log("Correct!");
-      // ADD FUNCTION FOR WIN
+  const [guessTmdbId, setGuessTmdbId] = useState(null);
+  const [guessCredits, setGuessCredits] = useState(null);
+  const [guessPosterPath, setGuessPosterPath] = useState(null);
+
+  // Fetching Credits (Director) of movie guess.
+  useEffect(() => {
+    if(!guessTmdbId)
+      return;
+
+    const fetchGuessCredits = async () => {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${guessTmdbId}/credits?api_key=${apiKey}`);
+      const data = await res.json();
+      setGuessCredits(data);
     }
-    else if (oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase())) {
-      console.log("Try again.");
-      // ADD FUNCTION FOR IF MOVIE IS NOT THE RIGHT ONE BUT IS NOMINATED
 
-      // Fetch userGuess's movie info
-      var guessMovie = oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase());
+    fetchGuessCredits();
+  }, [guessTmdbId]);
 
-      var guessTitle = guessMovie.movies[0].title;
-      var guessTmbdId = guessMovie.movies[0].tmdb_id;
-      var guessYear = guessMovie.year;
-      var guessCategory = guessMovie.category;
-      var guessWin = guessMovie.won;
+  // Fetching Poster Path of movie guess.
+  useEffect(() => {
+    if(!guessTmdbId)
+      return;
 
-      console.log("Movie guess: " + guessTitle+ ". ID: " + guessTmbdId + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ".");
-
-      checkStatus(userGuess);
-      
+    const fetchGuessPosterPath = async () => {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/images?api_key=${apiKey}`);
+      const data = await res.json();
+      setGuessPosterPath(data);
     }
-    else {
-      console.log("Invalid Guess (movie not nominated)");
-    }
-  };
+
+    fetchGuessPosterPath();
+  }, [guessTmdbId]);
+
+  // Gathering info of movie guess.
+  useEffect(() => {
+    if(!guessTmdbId || !guessCredits) return;
+
+    const guessMovie = oscarData.find(m => m.movies?.[0]?.tmdb_id === guessTmdbId);
+
+    if(!guessMovie) return;
+
+    const guessTitle = guessMovie.movies[0].title;
+    const guessYear = guessMovie.year;
+    const guessCategory = guessMovie.category;
+    const guessWin = guessMovie.won;
+    const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
+    // const guessPoster = 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path // Not Working rn
+
+    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ". Poster: ");
+
+    // checkStatus(guessTitle);
+
+  }, [guessCredits]);
 
   function checkStatus(userGuess) {
     // userGuess's title status = red
