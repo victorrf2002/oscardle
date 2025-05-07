@@ -10,36 +10,54 @@ import {useEffect, useState} from 'react';
 
 
 // Component for the answers rows
-function GuessAnswerRow() {
+function GuessAnswerRow({guesses, status}) {
+  
  return(
-  <tbody>
-    <tr class=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-      <td class=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" class="w-30"></img></td>
-      <td class="px-6 py-4 bg-oscar-emerald">The Social Network</td>
-      <td class="px-6 py-4 bg-oscar-red">David Fincher</td>
-      <td class="px-6 py-4 bg-oscar-light-gold">2011</td>
-      <td class="px-6 py-4 bg-oscar-emerald">Best Director</td>
-      <td class="px-6 py-4 bg-oscar-red">Yes</td>
-    </tr>
+    <tbody>
+      {guesses.map((guess, index) => {
+        const currentStatus = status[index];
+        return (
+          <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={index}>
+            <td className="w-30"></td>
+            <td  className={`px-6 py-4 ${currentStatus.title}`} >{guess.title}</td>
+            <td  className={`px-6 py-4 ${currentStatus.director}`} >{guess.director}</td>
+            <td  className={`px-6 py-4 ${currentStatus.year}`} >{guess.year}</td>
+            <td  className={`px-6 py-4 ${currentStatus.category}`} >{guess.category}</td>
+            <td  className={`px-6 py-4 ${currentStatus.win}`} >{guess.win ? 'Yes' : 'No'}</td>
+        </tr>
+        ); 
+        
+      })}
+    </tbody>
 
-    <tr class=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-      <td class=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" class="w-30"></img></td>
-      <td class="px-6 py-4 bg-oscar-emerald">The Social Network</td>
-      <td class="px-6 py-4 bg-oscar-red">David Fincher</td>
-      <td class="px-6 py-4 bg-oscar-light-gold">2011</td>
-      <td class="px-6 py-4 bg-oscar-emerald">Best Director</td>
-      <td class="px-6 py-4 bg-oscar-red">Yes</td>
-    </tr>
+  // <tbody>
+  //   <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+  //     <td className=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" classNameName="w-30"></img></td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">The Social Network</td>
+  //     <td className="px-6 py-4 bg-oscar-red">David Fincher</td>
+  //     <td className="px-6 py-4 bg-oscar-light-gold">2011</td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">Best Director</td>
+  //     <td className="px-6 py-4 bg-oscar-red">Yes</td>
+  //   </tr>
 
-    <tr class=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-      <td class=""><img src="src/assets/uQ538BfYLDJh3GXlzRZLo0j7PFj.webp" class="w-30"></img></td>
-      <td class="px-6 py-4 bg-oscar-emerald">The King's Speech</td>
-      <td class="px-6 py-4 bg-oscar-emerald">Tom Hooper</td>
-      <td class="px-6 py-4 bg-oscar-emerald">2011</td>
-      <td class="px-6 py-4 bg-oscar-emerald">Best Picture</td>
-      <td class="px-6 py-4 bg-oscar-emerald">Yes</td>
-    </tr>
-  </tbody>
+  //   <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+  //     <td className=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" className="w-30"></img></td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">The Social Network</td>
+  //     <td className="px-6 py-4 bg-oscar-red">David Fincher</td>
+  //     <td className="px-6 py-4 bg-oscar-light-gold">2011</td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">Best Director</td>
+  //     <td className="px-6 py-4 bg-oscar-red">Yes</td>
+  //   </tr>
+
+  //   <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+  //     <td className=""><img src="src/assets/uQ538BfYLDJh3GXlzRZLo0j7PFj.webp" className="w-30"></img></td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">The King's Speech</td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">Tom Hooper</td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">2011</td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">Best Picture</td>
+  //     <td className="px-6 py-4 bg-oscar-emerald">Yes</td>
+  //   </tr>
+  // </tbody>
  )
   
 }
@@ -50,27 +68,27 @@ function GuessCategoryRow() {
   return(
         
     <tr>
-      <th scope="col" class="w-20"></th>
-      <th scope="col" class="px-6 py-3">Title</th>
-      <th scope="col" class="px-6 py-3">Director</th>
-      <th scope="col" class="px-6 py-3">Year</th>
-      <th scope="col" class="px-6 py-3">Nomination</th>
-      <th scope="col" class="px-6 py-3">Win</th>
+      <th scope="col" className="w-20"></th>
+      <th scope="col" className="px-6 py-3">Title</th>
+      <th scope="col" className="px-6 py-3">Director</th>
+      <th scope="col" className="px-6 py-3">Year</th>
+      <th scope="col" className="px-6 py-3">Nomination</th>
+      <th scope="col" className="px-6 py-3">Win</th>
     </tr>
   )
 }
 
 // Component for the whole Guess table section
-function GuessTable() {
+function GuessTable({guesses, status}) {
   return (
 
-    <div class="relative overflow-x-auto">
-      <table class=" mt-10 w-full text-left rtl:text-right text-lg table-auto ">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
+    <div className="relative overflow-x-auto">
+      <table className=" mt-10 w-full text-left rtl:text-right text-lg table-auto ">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
           <GuessCategoryRow/>
         </thead>
 
-        <GuessAnswerRow/>
+        <GuessAnswerRow guesses={guesses} status={status}/>
       
       </table>
     </div>
@@ -94,9 +112,9 @@ function GuessBar({onGuessSubmit}) {
  
 
   return (
-      <form onSubmit={handleSubmit} class="flex flex-row justify-center gap-2.5 mt-10">
-        <input value={input} onChange={(e) => setInput(e.target.value)} class="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
-        <button type='submit' class="bg-oscar-light-gold p-6 text-xl">OK</button>
+      <form onSubmit={handleSubmit} className="flex flex-row justify-center gap-2.5 mt-10">
+        <input value={input} onChange={(e) => setInput(e.target.value)} className="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+        <button type='submit' className="bg-oscar-light-gold p-6 text-xl">OK</button>
       </form>
   )
 
@@ -105,12 +123,12 @@ function GuessBar({onGuessSubmit}) {
 // Component for header
 function Header() {
   return (
-    <header class="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
+    <header className="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
 
       {/* this is just a placeholder CHANGE AFTER */}
-      <p id='date' class='mb-0'>APRIL 9, 2025</p> 
+      <p id='date' className='mb-0'>APRIL 9, 2025</p> 
 
-      <button class="bg-oscar-dark-gold px-4 mb-2">HOW TO PLAY</button>
+      <button className="bg-oscar-dark-gold px-4 mb-2">HOW TO PLAY</button>
     </header>
   );
 }
@@ -187,20 +205,24 @@ function App() {
   }, []);
 
   const director = (movieCredits && movieCredits.crew.find((element) => element.job === 'Director').name);
-  const moviePoster = (movieCredits && 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path); // Link to movie poster
+  // const moviePoster = (movieCredits && 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path); // Link to movie poster
 
-  console.log(moviePoster);
+  // console.log(moviePoster);
   console.log(movie);
   console.log(director);
   console.log(year);
   console.log(category);
   console.log("Win: " + win);
 
+
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess) => {
 
+    
+
     if(userGuess.toLowerCase() === movie.toLowerCase()) {
       console.log("Correct!");
+      setGuessTmdbId(tmdbId);
       // ADD FUNCTION FOR WIN
     }
     else if (oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase())) {
@@ -248,6 +270,10 @@ function App() {
     fetchGuessPosterPath();
   }, [guessTmdbId]);
 
+  // Keep track of guesses
+  const [guesses, setGuesses] = useState([]);
+  const [status, setStatus] = useState([]);
+
   // Gathering info of movie guess.
   useEffect(() => {
     if(!guessTmdbId || !guessCredits) return;
@@ -269,55 +295,71 @@ function App() {
 
     // Checking matches between guessed movie and actual movie.
     if(guessTitle === movie) {
-      titleStatus = 'green';
+      titleStatus = 'bg-oscar-emerald';
     };
 
     if(guessDirector === director) {
-      directorStatus = 'green';
+      directorStatus = 'bg-oscar-emerald';
     };
 
     if(guessYear === year) {
-      yearStatus = 'green';
+      yearStatus = 'bg-oscar-emerald';
     }
     else if((guessYear < (year + 5)) && (guessYear > (year - 5))) { // FIX THIS
-      yearStatus = 'yellow';
+      yearStatus = 'bg-oscar-light-gold';
     };
 
     if(guessCategory === category) {
-      categoryStatus = 'green';
+      categoryStatus = 'bg-oscar-emerald';
     } 
     else {
       for (let i = 0; i < categoryTypes.length; i++) {
         if(categoryTypes[i].includes(category) && categoryTypes[i].includes(guessCategory)) {
-          categoryStatus = 'yellow';
+          categoryStatus = 'bg-oscar-light-gold';
         }
       };
     };
 
     if(guessWin === win) {
-      winStatus = 'green';
+      winStatus = 'bg-oscar-emerald';
     }
-    //
+    
+    setGuesses(prev => [...prev, {
+      title: guessTitle,
+      director: guessDirector,
+      year: guessYear,
+      category: guessCategory,
+      win: guessWin,
+    }]);
+
+    setStatus(prev => [...prev, {
+      title: titleStatus,
+      director: directorStatus,
+      year: yearStatus,
+      category: categoryStatus,
+      win: winStatus
+    }]);
 
     console.log('Title Status: ' + titleStatus + '. Director Status: ' + directorStatus + '. Year Status: ' + yearStatus + '. Category Status: ' + categoryStatus
       + ". Win Status: " + winStatus + ".");
 
+    console.log("Status object: " + status);
+
   }, [guessCredits]);
 
   // Status is either green, yellow, or red. For the category columns
-  var status = null;
-  var titleStatus = 'red';
-  var directorStatus = 'red';
-  var yearStatus = 'red';
-  var categoryStatus = 'red';
-  var winStatus = 'red';
+  var titleStatus = 'bg-oscar-red';
+  var directorStatus = 'bg-oscar-red';
+  var yearStatus = 'bg-oscar-red';
+  var categoryStatus = 'bg-oscar-red';
+  var winStatus = 'bg-oscar-red';
 
   return (
     <div>
       <Header/>
-      <h1 class="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
+      <h1 className="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
       <GuessBar onGuessSubmit={handleGuess}/> 
-      <GuessTable/>
+      <GuessTable guesses={guesses} status={status}/>
     </div>
     
   );
