@@ -279,7 +279,7 @@ function App() {
     if(guessYear === year) {
       yearStatus = 'green';
     }
-    else if((year <= guessYear - 5) || (year >= guessYear + 5)) { // FIX THIS NEXT
+    else if((guessYear < (year + 5)) && (guessYear > (year - 5))) { // FIX THIS
       yearStatus = 'yellow';
     };
 
@@ -297,6 +297,7 @@ function App() {
     if(guessWin === win) {
       winStatus = 'green';
     }
+    //
 
     console.log('Title Status: ' + titleStatus + '. Director Status: ' + directorStatus + '. Year Status: ' + yearStatus + '. Category Status: ' + categoryStatus
       + ". Win Status: " + winStatus + ".");
