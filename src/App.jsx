@@ -120,6 +120,18 @@ function App() {
   const [movieCredits, setMovieCredits] = useState(null);
   const [moviePosterPath, setMoviePosterPath] = useState(null);
 
+  // Types of category
+  const categoryTypes = [
+    ['Best Actor', 'Best Actress', 'Best Supporting Actor', 'Best Supporting Actress'],
+    ['Best Director', 'Best Picture', 'Best International Feature Film', 'Best Animated Feature', 'Best Documentary Feature'],
+    ['Best Original Screenplay', 'Best Adapted Screenplay', 'Best Original Story'],
+    ['Best Sound Editing', 'Best Sound Mixing', 'Best Score', 'Best Original Song'],
+    ['Best Cinematography (Black and White)', 'Best Cinematography (Color)', 'Best Production Design (Black and White)', 'Best Production Design (Color)',
+      'Best Costume Design (Black and White)', 'Best Costume Design (Color)', 'Best Makeup and Hairstyling', 'Best Visual/Special Effects', 'Best Film Editing'
+    ],
+    ['Best Animated Short', 'Best Documentary Short', 'Best Live Action Short (Comedy or One Reel or Regular)']
+  ];
+
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
   const arrayLength = oscarData.length;
@@ -204,14 +216,6 @@ function App() {
     }
   };
 
-  // status is either green, yellow, or red.
-  var status = null;
-  var titleStatus = null;
-  var directorStatus = null;
-  var yearStatus = null;
-  var categoryStatus = null;
-  var winStatus = null;
-
   const [guessTmdbId, setGuessTmdbId] = useState(null);
   const [guessCredits, setGuessCredits] = useState(null);
   const [guessPosterPath, setGuessPosterPath] = useState(null);
@@ -263,21 +267,49 @@ function App() {
 
     // checkStatus(guessTitle);
 
+    // Checking matches between guessed movie and actual movie.
+    if(guessTitle === movie) {
+      titleStatus = 'green';
+    };
+
+    if(guessDirector === director) {
+      directorStatus = 'green';
+    };
+
+    if(guessYear === year) {
+      yearStatus = 'green';
+    }
+    else if((year <= guessYear - 5) || (year >= guessYear + 5)) { // FIX THIS NEXT
+      yearStatus = 'yellow';
+    };
+
+    if(guessCategory === category) {
+      categoryStatus = 'green';
+    } 
+    else {
+      for (let i = 0; i < categoryTypes.length; i++) {
+        if(categoryTypes[i].includes(category) && categoryTypes[i].includes(guessCategory)) {
+          categoryStatus = 'yellow';
+        }
+      };
+    };
+
+    if(guessWin === win) {
+      winStatus = 'green';
+    }
+
+    console.log('Title Status: ' + titleStatus + '. Director Status: ' + directorStatus + '. Year Status: ' + yearStatus + '. Category Status: ' + categoryStatus
+      + ". Win Status: " + winStatus + ".");
+
   }, [guessCredits]);
 
-  function checkStatus(userGuess) {
-    // userGuess's title status = red
-    titleStatus = 'red';
-
-    // if userGuess's director = movie's director then userGuess's director status = green.
-    // OR else red
-
-    // if userGuess's year = movie's year then userGuess's year status = green.
-    // OR else if userGuess's year > movie's year - 5 OR < movie's year + 5 then status = yellow.
-    // OR else red.
-
-    // Same idea for nomination and win
-  }
+  // Status is either green, yellow, or red. For the category columns
+  var status = null;
+  var titleStatus = 'red';
+  var directorStatus = 'red';
+  var yearStatus = 'red';
+  var categoryStatus = 'red';
+  var winStatus = 'red';
 
   return (
     <div>
