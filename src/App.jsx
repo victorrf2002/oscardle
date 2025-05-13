@@ -266,7 +266,7 @@ function App() {
                         ? 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path
                         : null;
 
-    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ". Poster: " + guessPoster + ". test: " + guessPosterPath);
+    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ". Poster: " + guessPoster);
 
     // checkStatus(guessTitle);
 
@@ -282,7 +282,7 @@ function App() {
     if(guessYear === year) {
       yearStatus = 'bg-oscar-emerald';
     }
-    else if((guessYear < (year + 5)) && (guessYear > (year - 5))) { // FIX THIS
+    else if((guessYear <= parseInt(year) + 5) && (guessYear >= parseInt(year) - 5)) {
       yearStatus = 'bg-oscar-light-gold';
     };
 
