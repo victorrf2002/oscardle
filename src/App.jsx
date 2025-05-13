@@ -18,7 +18,8 @@ function GuessAnswerRow({guesses, status}) {
         const currentStatus = status[index];
         return (
           <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={index}>
-            <td className="w-30"></td>
+            
+            <td className=""><img src={`${guess.poster}`} className="w-30"></img></td>
             <td  className={`px-6 py-4 ${currentStatus.title}`} >{guess.title}</td>
             <td  className={`px-6 py-4 ${currentStatus.director}`} >{guess.director}</td>
             <td  className={`px-6 py-4 ${currentStatus.year}`} >{guess.year}</td>
@@ -193,21 +194,24 @@ function App() {
       });
   }, []);
 
+
   // Fetch movie poster path from TMDB
-  useEffect(() => {
-    fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/images?api_key=${apiKey}`)
+  useEffect( () => {
+     fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/images?api_key=${apiKey}`)
       .then(res => {
         return res.json()
       })
       .then(data => {
-        setMoviePosterPath(data);
+         setMoviePosterPath(data);
       });
   }, []);
 
   const director = (movieCredits && movieCredits.crew.find((element) => element.job === 'Director').name);
-  // const moviePoster = (movieCredits && 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path); // Link to movie poster
+  const moviePoster = (moviePosterPath?.posters?.length > 0)
+                      ? 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path
+                      : null;
 
-  // console.log(moviePoster);
+  console.log(moviePoster);
   console.log(movie);
   console.log(director);
   console.log(year);
@@ -254,21 +258,20 @@ function App() {
     }
 
     fetchGuessCredits();
-  }, [guessTmdbId]);
+  }, [guessTmdbId, apiKey]);
 
   // Fetching Poster Path of movie guess.
   useEffect(() => {
-    if(!guessTmdbId)
-      return;
-
-    const fetchGuessPosterPath = async () => {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/images?api_key=${apiKey}`);
+    if (!guessTmdbId) return;
+  
+    const fetchGuessPoster = async () => {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${guessTmdbId}/images?api_key=${apiKey}`);
       const data = await res.json();
       setGuessPosterPath(data);
-    }
-
-    fetchGuessPosterPath();
-  }, [guessTmdbId]);
+    };
+  
+    fetchGuessPoster();
+  }, [guessTmdbId, apiKey]);
 
   // Keep track of guesses
   const [guesses, setGuesses] = useState([]);
@@ -276,7 +279,7 @@ function App() {
 
   // Gathering info of movie guess.
   useEffect(() => {
-    if(!guessTmdbId || !guessCredits) return;
+    if(!guessTmdbId || !guessCredits || !guessPosterPath ) return;
 
     const guessMovie = oscarData.find(m => m.movies?.[0]?.tmdb_id === guessTmdbId);
 
@@ -287,9 +290,11 @@ function App() {
     const guessCategory = guessMovie.category;
     const guessWin = guessMovie.won;
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
-    // const guessPoster = 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path // Not Working rn
+    const guessPoster = (guessPosterPath?.posters?.length > 0)
+                        ? 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path
+                        : null;
 
-    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ". Poster: ");
+    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ". Poster: " + guessPoster + ". test: " + guessPosterPath);
 
     // checkStatus(guessTitle);
 
@@ -330,6 +335,7 @@ function App() {
       year: guessYear,
       category: guessCategory,
       win: guessWin,
+      poster: guessPoster
     }]);
 
     setStatus(prev => [...prev, {
@@ -345,7 +351,7 @@ function App() {
 
     console.log("Status object: " + status);
 
-  }, [guessCredits]);
+  }, [guessCredits, guessPosterPath]);
 
   // Status is either green, yellow, or red. For the category columns
   var titleStatus = 'bg-oscar-red';
