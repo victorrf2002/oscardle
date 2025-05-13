@@ -31,34 +31,6 @@ function GuessAnswerRow({guesses, status}) {
       })}
     </tbody>
 
-  // <tbody>
-  //   <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-  //     <td className=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" classNameName="w-30"></img></td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">The Social Network</td>
-  //     <td className="px-6 py-4 bg-oscar-red">David Fincher</td>
-  //     <td className="px-6 py-4 bg-oscar-light-gold">2011</td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">Best Director</td>
-  //     <td className="px-6 py-4 bg-oscar-red">Yes</td>
-  //   </tr>
-
-  //   <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-  //     <td className=""><img src="src/assets/518zV7F39qL._AC_UF894,1000_QL80_.jpg" className="w-30"></img></td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">The Social Network</td>
-  //     <td className="px-6 py-4 bg-oscar-red">David Fincher</td>
-  //     <td className="px-6 py-4 bg-oscar-light-gold">2011</td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">Best Director</td>
-  //     <td className="px-6 py-4 bg-oscar-red">Yes</td>
-  //   </tr>
-
-  //   <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-  //     <td className=""><img src="src/assets/uQ538BfYLDJh3GXlzRZLo0j7PFj.webp" className="w-30"></img></td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">The King's Speech</td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">Tom Hooper</td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">2011</td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">Best Picture</td>
-  //     <td className="px-6 py-4 bg-oscar-emerald">Yes</td>
-  //   </tr>
-  // </tbody>
  )
   
 }
@@ -221,9 +193,9 @@ function App() {
 
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess) => {
-
+    setGuessCredits(null);
+    setGuessPosterPath(null);
     
-
     if(userGuess.toLowerCase() === movie.toLowerCase()) {
       console.log("Correct!");
       setGuessTmdbId(tmdbId);
