@@ -25,7 +25,7 @@ function GuessAnswerRow({guesses, status}) {
             <td  className={`px-6 py-4 ${currentStatus.director}`} >{guess.director}</td>
             <td  className={`px-6 py-4 ${currentStatus.year}`} >{guess.year}</td>
             <td  className={`px-6 py-4 ${currentStatus.genre}`} >{guess.genre}</td>
-            <td  className={`px-6 py-4 ${currentStatus.win}`} >{guess.win ? 'Yes' : 'No'}</td>
+            <td  className={`px-6 py-4 ${currentStatus.wins}`} >{guess.wins}</td>
         </tr>
         ); 
         
@@ -139,7 +139,6 @@ function App() {
   const tmdbId = randomMovie.movies[0].tmdb_id;
   const movie = randomMovie.movies[0].title;
   const year = randomMovie.year;
-  const win = randomMovie.won;
   
   console.log("Id: " + tmdbId);
 
@@ -187,7 +186,7 @@ function App() {
   // Get number of wins
   function getWins(movie) {
     var count = 0;
-    for (var i = 0; i < 32; i++) {
+    for (var i = 0; i < arrayLength; i++) {
       if(oscarData[i].movies[0].title == movie && oscarData[i].won) {
         count++;
       }
@@ -195,12 +194,14 @@ function App() {
     return count;
   };
 
+  const wins = getWins(movie);
+
   console.log(moviePoster);
   console.log(movie);
   console.log(director);
   console.log(genre);
   console.log(year);
-  console.log("Number of Wins: " + getWins(movie));
+  console.log("Number of Wins: " + wins);
 
 
   // Handle the user's guess to see if it matches the movie
@@ -284,21 +285,23 @@ function App() {
 
     if(!guessMovie) return;
 
+
     const guessTitle = guessMovie.movies[0].title;
     const guessYear = guessMovie.year;
-    var guessWin = guessMovie.won;
+    var guessWins = getWins(guessTitle);
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
     const guessPoster = (guessPosterPath?.posters?.length > 0)
                         ? 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path
                         : null;
     const guessGenre = guessMovieGenre.genres[0].name;
 
-    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Win: " + guessWin + ". Poster: " + guessPoster + ". Genre: " + guessGenre);
+
+    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Win: " + guessWins + ". Poster: " + guessPoster + ". Genre: " + guessGenre);
 
     // Checking matches between guessed movie and actual movie.
     if(guessTitle === movie) {
       titleStatus = 'bg-oscar-emerald';
-      guessWin = win;
+      guessWins = wins;
     };
 
     if(guessDirector === director) {
@@ -316,7 +319,7 @@ function App() {
       genreStatus = 'bg-oscar-emerald';
     }
 
-    if(guessWin === win) {
+    if(guessWins === wins) {
       winStatus = 'bg-oscar-emerald';
     }
     
@@ -325,7 +328,7 @@ function App() {
       director: guessDirector,
       year: guessYear,
       genre: guessGenre,
-      win: guessWin,
+      wins: guessWins,
       poster: guessPoster
     }]);
 
@@ -334,7 +337,7 @@ function App() {
       director: directorStatus,
       year: yearStatus,
       genre: genreStatus,
-      win: winStatus
+      wins: winStatus
     }]);
 
     console.log('Title Status: ' + titleStatus + '. Director Status: ' + directorStatus + '. Year Status: ' + yearStatus + ". Win Status: " + winStatus + ". Genre Status: " + genreStatus);
