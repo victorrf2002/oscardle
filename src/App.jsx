@@ -23,7 +23,7 @@ function GuessAnswerRow({guesses, status}) {
             <td  className={`px-6 py-4 ${currentStatus.title}`} >{guess.title}</td>
             <td  className={`px-6 py-4 ${currentStatus.director}`} >{guess.director}</td>
             <td  className={`px-6 py-4 ${currentStatus.year}`} >{guess.year}</td>
-            <td  className={`px-6 py-4 ${currentStatus.category}`} >{guess.category}</td>
+            <td  className={`px-6 py-4 ${currentStatus.genre}`} >{guess.genre}</td>
             <td  className={`px-6 py-4 ${currentStatus.win}`} >{guess.win ? 'Yes' : 'No'}</td>
         </tr>
         ); 
@@ -45,7 +45,7 @@ function GuessCategoryRow() {
       <th scope="col" className="px-6 py-3">Title</th>
       <th scope="col" className="px-6 py-3">Director</th>
       <th scope="col" className="px-6 py-3">Year</th>
-      <th scope="col" className="px-6 py-3">Nomination</th>
+      <th scope="col" className="px-6 py-3">Genre</th>
       <th scope="col" className="px-6 py-3">Win</th>
     </tr>
   )
@@ -110,18 +110,7 @@ function Header() {
 function App() {
   const [movieCredits, setMovieCredits] = useState(null);
   const [moviePosterPath, setMoviePosterPath] = useState(null);
-
-  // Types of category
-  const categoryTypes = [
-    ['Best Actor', 'Best Actress', 'Best Supporting Actor', 'Best Supporting Actress'],
-    ['Best Director', 'Best Picture', 'Best International Feature Film', 'Best Animated Feature', 'Best Documentary Feature'],
-    ['Best Original Screenplay', 'Best Adapted Screenplay', 'Best Original Story'],
-    ['Best Sound Editing', 'Best Sound Mixing', 'Best Score', 'Best Original Song'],
-    ['Best Cinematography (Black and White)', 'Best Cinematography (Color)', 'Best Production Design (Black and White)', 'Best Production Design (Color)',
-      'Best Costume Design (Black and White)', 'Best Costume Design (Color)', 'Best Makeup and Hairstyling', 'Best Visual/Special Effects', 'Best Film Editing'
-    ],
-    ['Best Animated Short', 'Best Documentary Short', 'Best Live Action Short (Comedy or One Reel or Regular)']
-  ];
+  const [movieGenre, setMovieGenre] = useState(null);
 
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -149,7 +138,6 @@ function App() {
   const tmdbId = randomMovie.movies[0].tmdb_id;
   const movie = randomMovie.movies[0].title;
   const year = randomMovie.year;
-  const category = randomMovie.category;
   const win = randomMovie.won;
   
   console.log("Id: " + tmdbId);
@@ -178,16 +166,28 @@ function App() {
       });
   }, []);
 
+  // Fetch movie genre from TMDB
+  useEffect(() => {
+    fetch(`https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${apiKey}`)
+    .then(res => {
+      return res.json()
+    })
+    .then(data => {
+      setMovieGenre(data);
+    });
+  }, []);
+
   const director = (movieCredits && movieCredits.crew.find((element) => element.job === 'Director').name);
   const moviePoster = (moviePosterPath?.posters?.length > 0)
                       ? 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path
                       : null;
+  const genre = (movieGenre) ? movieGenre.genres[0].name : null;
 
   console.log(moviePoster);
   console.log(movie);
   console.log(director);
+  console.log(genre);
   console.log(year);
-  console.log(category);
   console.log("Win: " + win);
 
 
@@ -195,6 +195,7 @@ function App() {
   const handleGuess = (userGuess) => {
     setGuessCredits(null);
     setGuessPosterPath(null);
+    setGuessMovieGenre(null);
     
     if(userGuess.toLowerCase() === movie.toLowerCase()) {
       console.log("Correct!");
@@ -217,6 +218,7 @@ function App() {
   const [guessTmdbId, setGuessTmdbId] = useState(null);
   const [guessCredits, setGuessCredits] = useState(null);
   const [guessPosterPath, setGuessPosterPath] = useState(null);
+  const [guessMovieGenre, setGuessMovieGenre] = useState(null);
 
   // Fetching Credits (Director) of movie guess.
   useEffect(() => {
@@ -245,13 +247,26 @@ function App() {
     fetchGuessPoster();
   }, [guessTmdbId, apiKey]);
 
+  // Fetching Genre of movie guess
+  useEffect(() => {
+    if (!guessTmdbId) return;
+
+    const fetchGuessMovieGenre = async () => {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${guessTmdbId}?api_key=${apiKey}`);
+      const data = await res.json();
+      setGuessMovieGenre(data);
+    };
+
+    fetchGuessMovieGenre();
+  }, [guessTmdbId, apiKey]);
+
   // Keep track of guesses
   const [guesses, setGuesses] = useState([]);
   const [status, setStatus] = useState([]);
 
   // Gathering info of movie guess.
   useEffect(() => {
-    if(!guessTmdbId || !guessCredits || !guessPosterPath ) return;
+    if(!guessTmdbId || !guessCredits || !guessPosterPath || !guessMovieGenre) return;
 
     const guessMovie = oscarData.find(m => m.movies?.[0]?.tmdb_id === guessTmdbId);
 
@@ -259,19 +274,18 @@ function App() {
 
     const guessTitle = guessMovie.movies[0].title;
     const guessYear = guessMovie.year;
-    var guessCategory = guessMovie.category;
     var guessWin = guessMovie.won;
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
     const guessPoster = (guessPosterPath?.posters?.length > 0)
                         ? 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path
                         : null;
+    const guessGenre = guessMovieGenre.genres[0].name;
 
-    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ". Poster: " + guessPoster);
+    console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Win: " + guessWin + ". Poster: " + guessPoster + ". Genre: " + guessGenre);
 
     // Checking matches between guessed movie and actual movie.
     if(guessTitle === movie) {
       titleStatus = 'bg-oscar-emerald';
-      guessCategory = category;
       guessWin = win;
     };
 
@@ -286,16 +300,9 @@ function App() {
       yearStatus = 'bg-oscar-light-gold';
     };
 
-    if(guessCategory === category) {
-      categoryStatus = 'bg-oscar-emerald';
-    } 
-    else {
-      for (let i = 0; i < categoryTypes.length; i++) {
-        if(categoryTypes[i].includes(category) && categoryTypes[i].includes(guessCategory)) {
-          categoryStatus = 'bg-oscar-light-gold';
-        }
-      };
-    };
+    if(guessGenre === genre) {
+      genreStatus = 'bg-oscar-emerald';
+    }
 
     if(guessWin === win) {
       winStatus = 'bg-oscar-emerald';
@@ -305,7 +312,7 @@ function App() {
       title: guessTitle,
       director: guessDirector,
       year: guessYear,
-      category: guessCategory,
+      genre: guessGenre,
       win: guessWin,
       poster: guessPoster
     }]);
@@ -314,12 +321,11 @@ function App() {
       title: titleStatus,
       director: directorStatus,
       year: yearStatus,
-      category: categoryStatus,
+      genre: genreStatus,
       win: winStatus
     }]);
 
-    console.log('Title Status: ' + titleStatus + '. Director Status: ' + directorStatus + '. Year Status: ' + yearStatus + '. Category Status: ' + categoryStatus
-      + ". Win Status: " + winStatus + ".");
+    console.log('Title Status: ' + titleStatus + '. Director Status: ' + directorStatus + '. Year Status: ' + yearStatus + ". Win Status: " + winStatus + ". Genre Status: " + genreStatus);
 
     console.log("Status object: " + status);
 
@@ -329,8 +335,8 @@ function App() {
   var titleStatus = 'bg-oscar-red';
   var directorStatus = 'bg-oscar-red';
   var yearStatus = 'bg-oscar-red';
-  var categoryStatus = 'bg-oscar-red';
   var winStatus = 'bg-oscar-red';
+  var genreStatus = 'bg-oscar-red';
 
   return (
     <div>
