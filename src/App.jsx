@@ -322,6 +322,9 @@ function App() {
     if(guessWins === wins) {
       winStatus = 'bg-oscar-emerald';
     }
+    else if((guessWins <= parseInt(wins) + 3) && (guessWins >= parseInt(wins) - 3)) {
+      winStatus = 'bg-oscar-light-gold';
+    }
     
     setGuesses(prev => [...prev, {
       title: guessTitle,
