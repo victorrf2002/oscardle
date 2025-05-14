@@ -506,24 +506,6 @@
     "won": true
   },
   {
-    "category": "Best Visual/Special Effects",
-    "year": "1927/28",
-    "nominees": [
-      "Ralph Hammeras"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Visual/Special Effects",
-    "year": "1927/28",
-    "nominees": [
-      "Nugent Slaughter"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
     "category": "Best Picture",
     "year": "1928/29",
     "nominees": [
@@ -2516,42 +2498,6 @@
     "won": false
   },
   {
-    "category": "Best Sound Mixing",
-    "year": "1930/31",
-    "nominees": [
-      "Paramount Publix Studio Sound Department"
-    ],
-    "movies": [],
-    "won": true
-  },
-  {
-    "category": "Best Sound Mixing",
-    "year": "1930/31",
-    "nominees": [
-      "MGM Studio Sound Department"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Sound Mixing",
-    "year": "1930/31",
-    "nominees": [
-      "RKO Radio Studio Sound Department"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Sound Mixing",
-    "year": "1930/31",
-    "nominees": [
-      "Samuel Goldwyn-United Artists Studio Sound Department"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
     "category": "Best Picture",
     "year": "1931/32",
     "nominees": [
@@ -3140,51 +3086,6 @@
     "won": false
   },
   {
-    "category": "Best Sound Mixing",
-    "year": "1931/32",
-    "nominees": [
-      "Paramount Publix Studio Sound Department"
-    ],
-    "movies": [],
-    "won": true
-  },
-  {
-    "category": "Best Sound Mixing",
-    "year": "1931/32",
-    "nominees": [
-      "MGM Studio Sound Department"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Sound Mixing",
-    "year": "1931/32",
-    "nominees": [
-      "RKO Radio Studio Sound Department"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Sound Mixing",
-    "year": "1931/32",
-    "nominees": [
-      "Walt Disney Productions"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Sound Mixing",
-    "year": "1931/32",
-    "nominees": [
-      "Warner Bros. First National Studio Sound Department"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
     "category": "Best Picture",
     "year": "1932/33",
     "nominees": [
@@ -3467,64 +3368,6 @@
         "imdb_id": "tt0024264"
       }
     ],
-    "won": false
-  },
-  {
-    "category": "Best Assistant Director",
-    "year": "1932/33",
-    "nominees": [
-      "Charles Barton",
-      "Charles Dorian",
-      "Scott Beal",
-      "Fred Fox",
-      "Gordon Hollingshead",
-      "Dewey Starkey",
-      "William Tummel"
-    ],
-    "movies": [],
-    "won": true
-  },
-  {
-    "category": "Best Assistant Director",
-    "year": "1932/33",
-    "nominees": [
-      "Al Alleborn",
-      "Sid Brod",
-      "Orville O. Dull,"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Assistant Director",
-    "year": "1932/33",
-    "nominees": [
-      "Percy Ikerd",
-      "Arthur Jacobson",
-      "Edward Killy,"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Assistant Director",
-    "year": "1932/33",
-    "nominees": [
-      "Joseph A. McDonough",
-      "William J. Reiter",
-      "Frank Shaw,"
-    ],
-    "movies": [],
-    "won": false
-  },
-  {
-    "category": "Best Assistant Director",
-    "year": "1932/33",
-    "nominees": [
-      "Ben Silvey",
-      "John Waters"
-    ],
-    "movies": [],
     "won": false
   },
   {
@@ -98252,15 +98095,6 @@
       }
     ],
     "won": true
-  },
-  {
-    "category": "Best Documentary Feature",
-    "year": "1987",
-    "nominees": [
-      "Eyes on the Prize"
-    ],
-    "movies": [],
-    "won": false
   },
   {
     "category": "Best Documentary Feature",

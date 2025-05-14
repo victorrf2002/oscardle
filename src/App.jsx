@@ -6,7 +6,8 @@
 import './App.css';
 import oscarData from "./data/oscar-nominations.json";
 import {useEffect, useState} from 'react';
-// import axios from 'axios';
+
+
 
 
 // Component for the answers rows
@@ -46,7 +47,7 @@ function GuessCategoryRow() {
       <th scope="col" className="px-6 py-3">Director</th>
       <th scope="col" className="px-6 py-3">Year</th>
       <th scope="col" className="px-6 py-3">Genre</th>
-      <th scope="col" className="px-6 py-3">Win</th>
+      <th scope="col" className="px-6 py-3"># of Wins</th>
     </tr>
   )
 }
@@ -183,12 +184,23 @@ function App() {
                       : null;
   const genre = (movieGenre) ? movieGenre.genres[0].name : null;
 
+  // Get number of wins
+  function getWins(movie) {
+    var count = 0;
+    for (var i = 0; i < 32; i++) {
+      if(oscarData[i].movies[0].title == movie && oscarData[i].won) {
+        count++;
+      }
+    }
+    return count;
+  };
+
   console.log(moviePoster);
   console.log(movie);
   console.log(director);
   console.log(genre);
   console.log(year);
-  console.log("Win: " + win);
+  console.log("Number of Wins: " + getWins(movie));
 
 
   // Handle the user's guess to see if it matches the movie
