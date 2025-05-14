@@ -259,8 +259,8 @@ function App() {
 
     const guessTitle = guessMovie.movies[0].title;
     const guessYear = guessMovie.year;
-    const guessCategory = guessMovie.category;
-    const guessWin = guessMovie.won;
+    var guessCategory = guessMovie.category;
+    var guessWin = guessMovie.won;
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
     const guessPoster = (guessPosterPath?.posters?.length > 0)
                         ? 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path
@@ -268,11 +268,11 @@ function App() {
 
     console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Category: " + guessCategory + ". Win: " + guessWin + ". Poster: " + guessPoster);
 
-    // checkStatus(guessTitle);
-
     // Checking matches between guessed movie and actual movie.
     if(guessTitle === movie) {
       titleStatus = 'bg-oscar-emerald';
+      guessCategory = category;
+      guessWin = win;
     };
 
     if(guessDirector === director) {
