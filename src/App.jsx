@@ -15,7 +15,7 @@ function GuessAnswerRow({guesses, status}) {
   
  return(
     <tbody>
-      {guesses.map((guess, index) => {
+      {guesses.toReversed().map((guess, index) => {
         const currentStatus = status[index];
         return (
           <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={index}>
@@ -309,6 +309,15 @@ function App() {
       return;
     }
 
+    // Number of guesses
+    const numberOfGuesses = (guesses.length + 1);
+    console.log("Number of guesses: " + numberOfGuesses + "/8");
+
+    if (numberOfGuesses > 8) {
+      console.log("Maximum number of guesses reached.");
+      return;
+    }
+
     const guessYear = guessMovie.year;
     var guessWins = getWins(guessTitle);
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
@@ -317,7 +326,9 @@ function App() {
                         : null;
     const guessGenre = guessMovieGenre.genres[0].name;
 
+    
 
+    
     console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Win: " + guessWins + ". Poster: " + guessPoster + ". Genre: " + guessGenre);
 
     // Status is either green, yellow, or red. For the category columns
