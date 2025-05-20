@@ -140,7 +140,6 @@ function App() {
   const movie = randomMovie.movies[0].title;
   const year = randomMovie.year;
   
-  console.log("Id: " + tmdbId);
 
   // Fetch movie director from TMDB
   useEffect(() => {
@@ -196,35 +195,52 @@ function App() {
 
   const wins = getWins(movie);
 
-  console.log(moviePoster);
-  console.log(movie);
-  console.log(director);
-  console.log(genre);
-  console.log(year);
-  console.log("Number of Wins: " + wins);
+  console.log(`Chosen Film Id: ${tmdbId}. Title: ${movie}. Director: ${director}. Genre: ${genre}. Year: ${year}. Number of wins: ${wins}. Poster link: ${moviePoster}.`);
 
+  const [guessTrigger, setGuessTrigger] = useState(0);
 
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess) => {
     setGuessCredits(null);
     setGuessPosterPath(null);
     setGuessMovieGenre(null);
+
+    let matchedMovie = null;
     
     if(userGuess.toLowerCase() === movie.toLowerCase()) {
       console.log("Correct!");
-      setGuessTmdbId(tmdbId);
+      matchedMovie = {movies: [{tmdb_id: tmdbId}], year};
       // ADD FUNCTION FOR WIN
+    } else {
+      matchedMovie = oscarData.find(
+        m => m.movies[0].title.toString().toLowerCase() === userGuess.toLowerCase()
+      );
+      if (!matchedMovie) {
+        console.log("Invalid Guess. Not nominated.");
+        return;
+      }
+      console.log("Try again.")
     }
-    else if (oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase())) {
-      console.log("Try again.");
 
-      const guessMovie = oscarData.find(m => m.nominees.toString().toLowerCase() == userGuess.toLowerCase());
+    const newGuessId = matchedMovie.movies[0].tmdb_id;
+    setGuessTmdbId(newGuessId);
+    setGuessTrigger(prev => prev+1);
+    fetchGuessData(newGuessId);
+  };
 
-      setGuessTmdbId(guessMovie.movies[0].tmdb_id);
-      
-    }
-    else {
-      console.log("Invalid Guess (movie not nominated)");
+  const fetchGuessData = async (id) => {
+    try {
+      const [creditRes, posterRes, genreRes] = await Promise.all([
+        fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`).then(res => res.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${id}/images?api_key=${apiKey}`).then(res => res.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`).then(res => res.json())
+      ]);
+
+      setGuessCredits(creditRes);
+      setGuessPosterPath(posterRes);
+      setGuessMovieGenre(genreRes);
+    } catch (error) {
+      console.error("Failed to fetch guess data: ", error);
     }
   };
 
@@ -245,7 +261,7 @@ function App() {
     }
 
     fetchGuessCredits();
-  }, [guessTmdbId, apiKey]);
+  }, [guessTmdbId, apiKey, guessTrigger]);
 
   // Fetching Poster Path of movie guess.
   useEffect(() => {
@@ -258,7 +274,7 @@ function App() {
     };
   
     fetchGuessPoster();
-  }, [guessTmdbId, apiKey]);
+  }, [guessTmdbId, apiKey, guessTrigger]);
 
   // Fetching Genre of movie guess
   useEffect(() => {
@@ -271,7 +287,7 @@ function App() {
     };
 
     fetchGuessMovieGenre();
-  }, [guessTmdbId, apiKey]);
+  }, [guessTmdbId, apiKey, guessTrigger]);
 
   // Keep track of guesses
   const [guesses, setGuesses] = useState([]);
@@ -285,8 +301,14 @@ function App() {
 
     if(!guessMovie) return;
 
-
     const guessTitle = guessMovie.movies[0].title;
+
+    // Skip if the movie was already guessed
+    if (guesses.find(g => g.title.toLowerCase() === guessTitle.toLowerCase())) {
+      console.log("Duplicate guess. Ignoring.");
+      return;
+    }
+
     const guessYear = guessMovie.year;
     var guessWins = getWins(guessTitle);
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
@@ -297,6 +319,13 @@ function App() {
 
 
     console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Win: " + guessWins + ". Poster: " + guessPoster + ". Genre: " + guessGenre);
+
+    // Status is either green, yellow, or red. For the category columns
+    let titleStatus = 'bg-oscar-red';
+    let directorStatus = 'bg-oscar-red';
+    let yearStatus = 'bg-oscar-red';
+    let winStatus = 'bg-oscar-red';
+    let genreStatus = 'bg-oscar-red';
 
     // Checking matches between guessed movie and actual movie.
     if(guessTitle === movie) {
@@ -349,12 +378,7 @@ function App() {
 
   }, [guessCredits, guessPosterPath]);
 
-  // Status is either green, yellow, or red. For the category columns
-  var titleStatus = 'bg-oscar-red';
-  var directorStatus = 'bg-oscar-red';
-  var yearStatus = 'bg-oscar-red';
-  var winStatus = 'bg-oscar-red';
-  var genreStatus = 'bg-oscar-red';
+ 
 
   return (
     <div>
