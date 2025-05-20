@@ -72,7 +72,7 @@ function GuessTable({guesses, status}) {
 }
 
 // Component for guess input taking the onGuessSubmit function from App as a prop
-function GuessBar({onGuessSubmit}) {
+function GuessBar({onGuessSubmit, numberOfGuesses}) {
 
   const[input, setInput] = useState('');
 
@@ -87,6 +87,7 @@ function GuessBar({onGuessSubmit}) {
 
   return (
       <form onSubmit={handleSubmit} className="flex flex-row justify-center gap-2.5 mt-10">
+        <h6 className="pr-6 pb-6 pt-6 text-xl" >Guess {numberOfGuesses}/8</h6>
         <input value={input} onChange={(e) => setInput(e.target.value)} className="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
         <button type='submit' className="bg-oscar-light-gold p-6 text-xl">OK</button>
       </form>
@@ -292,6 +293,7 @@ function App() {
   // Keep track of guesses
   const [guesses, setGuesses] = useState([]);
   const [status, setStatus] = useState([]);
+  const [numberOfGuesses, setNumberOfGuesses] = useState(0);
 
   // Gathering info of movie guess.
   useEffect(() => {
@@ -310,13 +312,14 @@ function App() {
     }
 
     // Number of guesses
-    const numberOfGuesses = (guesses.length + 1);
-    console.log("Number of guesses: " + numberOfGuesses + "/8");
-
-    if (numberOfGuesses > 8) {
+    if (numberOfGuesses >= 8) {
       console.log("Maximum number of guesses reached.");
       return;
     }
+    setNumberOfGuesses(guesses.length +1);
+    console.log("Number of guesses: " + numberOfGuesses + "/8");
+
+    
 
     const guessYear = guessMovie.year;
     var guessWins = getWins(guessTitle);
@@ -395,7 +398,7 @@ function App() {
     <div>
       <Header/>
       <h1 className="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
-      <GuessBar onGuessSubmit={handleGuess}/> 
+      <GuessBar onGuessSubmit={handleGuess} numberOfGuesses={numberOfGuesses}/> 
       <GuessTable guesses={guesses} status={status}/>
     </div>
     
