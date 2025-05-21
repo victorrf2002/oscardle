@@ -9,7 +9,6 @@ import {useEffect, useState} from 'react';
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 function WinModal({openWinModal, setOpenWinModal}) {
-  
 
   return(
     <>
@@ -32,21 +31,20 @@ function WinModal({openWinModal, setOpenWinModal}) {
 }
 
 // Component for the answers rows
-function GuessAnswerRow({guesses, status}) {
+function GuessAnswerRow({guesses}) {
   
  return(
     <tbody>
       {guesses.toReversed().map((guess, index) => {
-        const currentStatus = status[index];
         return (
           <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={index}>
             
             <td className=""><img src={`${guess.poster}`} className="w-30"></img></td>
-            <td  className={`px-6 py-4 ${currentStatus.title}`} >{guess.title}</td>
-            <td  className={`px-6 py-4 ${currentStatus.director}`} >{guess.director}</td>
-            <td  className={`px-6 py-4 ${currentStatus.year}`} >{guess.year}</td>
-            <td  className={`px-6 py-4 ${currentStatus.genre}`} >{guess.genre}</td>
-            <td  className={`px-6 py-4 ${currentStatus.wins}`} >{guess.wins}</td>
+            <td  className={`px-6 py-4 ${guess.status.title}`} >{guess.title}</td>
+            <td  className={`px-6 py-4 ${guess.status.director}`} >{guess.director}</td>
+            <td  className={`px-6 py-4 ${guess.status.year}`} >{guess.year}</td>
+            <td  className={`px-6 py-4 ${guess.status.genre}`} >{guess.genre}</td>
+            <td  className={`px-6 py-4 ${guess.status.wins}`} >{guess.wins}</td>
         </tr>
         ); 
         
@@ -104,8 +102,6 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
     setInput("");
   }
 
- 
-
   return (
       <form onSubmit={handleSubmit} className="flex flex-row justify-center gap-2.5 mt-10">
         <h6 className="pr-6 pb-6 pt-6 text-xl" >Guess {numberOfGuesses}/8</h6>
@@ -156,12 +152,10 @@ function App() {
   const index = getDateHashIndex(oscarData.length);
   console.log("index: " + index);
   const randomMovie = oscarData[index]; // getting random oscar nomination from json file given the seed
-  
 
   const tmdbId = randomMovie.movies[0].tmdb_id;
   const movie = randomMovie.movies[0].title;
   const year = randomMovie.year;
-  
 
   // Fetch movie director from TMDB
   useEffect(() => {
@@ -174,7 +168,6 @@ function App() {
         setMovieCredits(data);
       });
   }, []);
-
 
   // Fetch movie poster path from TMDB
   useEffect( () => {
@@ -315,7 +308,6 @@ function App() {
 
   // Keep track of guesses
   const [guesses, setGuesses] = useState([]);
-  const [status, setStatus] = useState([]);
   const [numberOfGuesses, setNumberOfGuesses] = useState(0);
 
   // Gathering info of movie guess.
@@ -342,8 +334,6 @@ function App() {
     setNumberOfGuesses(guesses.length +1);
     console.log("Number of guesses: " + numberOfGuesses + "/8");
 
-    
-
     const guessYear = guessMovie.year;
     var guessWins = getWins(guessTitle);
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
@@ -351,46 +341,16 @@ function App() {
                         ? 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path
                         : null;
     const guessGenre = guessMovieGenre.genres[0].name;
-
-    
-
     
     console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Win: " + guessWins + ". Poster: " + guessPoster + ". Genre: " + guessGenre);
 
-    // Status is either green, yellow, or red. For the category columns
-    let titleStatus = 'bg-oscar-red';
-    let directorStatus = 'bg-oscar-red';
-    let yearStatus = 'bg-oscar-red';
-    let winStatus = 'bg-oscar-red';
-    let genreStatus = 'bg-oscar-red';
-
-    // Checking matches between guessed movie and actual movie.
-    if(guessTitle === movie) {
-      titleStatus = 'bg-oscar-emerald';
-      guessWins = wins;
+    const guessStatus = {
+      title: guessTitle === movie ? 'bg-oscar-emerald' : 'bg-oscar-red',
+      director: guessDirector === director ? 'bg-oscar-emerald' : 'bg-oscar-red',
+      year: guessYear === year ? 'bg-oscar-emerald' : ((guessYear <= parseInt(year) + 5) && guessYear >= parseInt(year) -5) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
+      genre: guessGenre === genre ? 'bg-oscar-emerald' : 'bg-oscar-red',
+      wins: guessWins === wins ? 'bg-oscar-emerald' : ((guessWins <= parseInt(wins) + 3) && (guessWins >= parseInt(wins) - 3)) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
     };
-
-    if(guessDirector === director) {
-      directorStatus = 'bg-oscar-emerald';
-    };
-
-    if(guessYear === year) {
-      yearStatus = 'bg-oscar-emerald';
-    }
-    else if((guessYear <= parseInt(year) + 5) && (guessYear >= parseInt(year) - 5)) {
-      yearStatus = 'bg-oscar-light-gold';
-    };
-
-    if(guessGenre === genre) {
-      genreStatus = 'bg-oscar-emerald';
-    }
-
-    if(guessWins === wins) {
-      winStatus = 'bg-oscar-emerald';
-    }
-    else if((guessWins <= parseInt(wins) + 3) && (guessWins >= parseInt(wins) - 3)) {
-      winStatus = 'bg-oscar-light-gold';
-    }
     
     setGuesses(prev => [...prev, {
       title: guessTitle,
@@ -398,34 +358,20 @@ function App() {
       year: guessYear,
       genre: guessGenre,
       wins: guessWins,
-      poster: guessPoster
+      poster: guessPoster,
+      status: guessStatus,
     }]);
-
-    setStatus(prev => [...prev, {
-      title: titleStatus,
-      director: directorStatus,
-      year: yearStatus,
-      genre: genreStatus,
-      wins: winStatus
-    }]);
-
-    console.log('Title Status: ' + titleStatus + '. Director Status: ' + directorStatus + '. Year Status: ' + yearStatus + ". Win Status: " + winStatus + ". Genre Status: " + genreStatus);
-
-    console.log("Status object: " + status);
 
   }, [guessCredits, guessPosterPath]);
-
- 
 
   return (
     <div>
       <Header/>
       <h1 className="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
       <GuessBar onGuessSubmit={handleGuess} numberOfGuesses={numberOfGuesses}/> 
-      <GuessTable guesses={guesses} status={status}/>
+      <GuessTable guesses={guesses}/>
       <WinModal openWinModal={openWinModal} setOpenWinModal={setOpenWinModal}/>
     </div>
-    
   );
 }
 
