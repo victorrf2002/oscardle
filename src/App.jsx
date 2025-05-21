@@ -310,6 +310,10 @@ function App() {
   const [guesses, setGuesses] = useState([]);
   const [numberOfGuesses, setNumberOfGuesses] = useState(0);
 
+  // Keep track of win/loss
+  let [gameWon, setGameWon] = useState(false);
+  let [gameLoss, setGameLoss] = useState(false);
+
   // Gathering info of movie guess.
   useEffect(() => {
     if(!guessTmdbId || !guessCredits || !guessPosterPath || !guessMovieGenre) return;
@@ -331,6 +335,11 @@ function App() {
       console.log("Maximum number of guesses reached.");
       return;
     }
+
+    // Check if game is won
+    if(gameWon === true) return;
+    
+
     setNumberOfGuesses(guesses.length +1);
     console.log("Number of guesses: " + numberOfGuesses + "/8");
 
@@ -361,6 +370,12 @@ function App() {
       poster: guessPoster,
       status: guessStatus,
     }]);
+
+    // If movie is guessed correctly, open the win modal
+    if (guessTitle === movie) {
+      setOpenWinModal(true);
+      setGameWon(true);
+    };
 
   }, [guessCredits, guessPosterPath]);
 
