@@ -6,9 +6,30 @@
 import './App.css';
 import oscarData from "./data/oscar-nominations.json";
 import {useEffect, useState} from 'react';
+import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
+function WinModal({openWinModal, setOpenWinModal}) {
+  
 
-
+  return(
+    <>
+      <button onClick={() => setOpenWinModal(true)}>Open Dialog</button>
+      <Dialog open={openWinModal} onClose={() => setOpenWinModal(false)} className="relative z-50">
+        <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
+          <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
+            <DialogTitle className="font-bold">Desactivate Account</DialogTitle>
+            <Description>This will permanently desactivate your account</Description>
+            <p>Are you sure you want to desactivate your account? All of your data will be lost.</p>
+            <div className="flex gap-4">
+              <button onClick={() => setOpenWinModal(false)}>Cancel</button>
+              <button onClick={() => setOpenWinModal(false)}>Desactivate</button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
+    </>
+  )
+}
 
 // Component for the answers rows
 function GuessAnswerRow({guesses, status}) {
@@ -199,6 +220,8 @@ function App() {
   console.log(`Chosen Film Id: ${tmdbId}. Title: ${movie}. Director: ${director}. Genre: ${genre}. Year: ${year}. Number of wins: ${wins}. Poster link: ${moviePoster}.`);
 
   const [guessTrigger, setGuessTrigger] = useState(0);
+
+  let [openWinModal, setOpenWinModal] = useState(false);
 
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess) => {
@@ -400,6 +423,7 @@ function App() {
       <h1 className="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
       <GuessBar onGuessSubmit={handleGuess} numberOfGuesses={numberOfGuesses}/> 
       <GuessTable guesses={guesses} status={status}/>
+      <WinModal openWinModal={openWinModal} setOpenWinModal={setOpenWinModal}/>
     </div>
     
   );
