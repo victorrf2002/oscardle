@@ -9,7 +9,7 @@ import {useEffect, useState} from 'react';
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 // Component for Win Modal
-function WinModal({openWinModal, setOpenWinModal}) {
+function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
 
   return(
     <>
@@ -19,7 +19,7 @@ function WinModal({openWinModal, setOpenWinModal}) {
           <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
             <DialogTitle className="text-oscar-dark-gold">And the award goes to... <span>You!</span></DialogTitle>
             {/* <Description></Description> */}
-            <img src={``}></img>
+            <img src={`${chosenMovie.moviePoster}`}></img>
             <p></p>
             <div className="flex gap-4">
               <button onClick={() => setOpenWinModal(false)}>Cancel</button>
@@ -133,6 +133,8 @@ function App() {
   const [moviePosterPath, setMoviePosterPath] = useState(null);
   const [movieGenre, setMovieGenre] = useState(null);
 
+  const [chosenMovie, setChosenMovie] = useState(null);
+
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
   const arrayLength = oscarData.length;
@@ -213,6 +215,15 @@ function App() {
   const wins = getWins(movie);
 
   console.log(`Chosen Film Id: ${tmdbId}. Title: ${movie}. Director: ${director}. Genre: ${genre}. Year: ${year}. Number of wins: ${wins}. Poster link: ${moviePoster}.`);
+
+  setChosenMovie({
+    title: movie,
+    director: director,
+    genre: genre,
+    year: year,
+    wins: wins,
+    moviePoster: moviePoster,
+  });
 
   const [guessTrigger, setGuessTrigger] = useState(0);
 
@@ -387,7 +398,7 @@ function App() {
       <h1 className="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
       <GuessBar onGuessSubmit={handleGuess} numberOfGuesses={numberOfGuesses}/> 
       <GuessTable guesses={guesses}/>
-      <WinModal openWinModal={openWinModal} setOpenWinModal={setOpenWinModal}/>
+      <WinModal openWinModal={openWinModal} setOpenWinModal={setOpenWinModal} chosenMovie={chosenMovie}/>
     </div>
   );
 }
