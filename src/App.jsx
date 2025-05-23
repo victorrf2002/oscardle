@@ -8,6 +8,7 @@ import oscarData from "./data/oscar-nominations.json";
 import {useEffect, useState} from 'react';
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
+// Component for Win Modal
 function WinModal({openWinModal, setOpenWinModal}) {
 
   return(
@@ -16,9 +17,10 @@ function WinModal({openWinModal, setOpenWinModal}) {
       <Dialog open={openWinModal} onClose={() => setOpenWinModal(false)} className="relative z-50">
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
           <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
-            <DialogTitle className="font-bold">Desactivate Account</DialogTitle>
-            <Description>This will permanently desactivate your account</Description>
-            <p>Are you sure you want to desactivate your account? All of your data will be lost.</p>
+            <DialogTitle className="text-oscar-dark-gold">And the award goes to... <span>You!</span></DialogTitle>
+            {/* <Description></Description> */}
+            <img src={``}></img>
+            <p></p>
             <div className="flex gap-4">
               <button onClick={() => setOpenWinModal(false)}>Cancel</button>
               <button onClick={() => setOpenWinModal(false)}>Desactivate</button>
