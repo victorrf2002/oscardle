@@ -13,18 +13,24 @@ function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
 
   return(
     <>
-      <button onClick={() => setOpenWinModal(true)}>Open Dialog</button>
+      {/* <button onClick={() => setOpenWinModal(true)}>Open Dialog</button> */}
       <Dialog open={openWinModal} onClose={() => setOpenWinModal(false)} className="relative z-50">
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
-          <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
-            <DialogTitle className="text-oscar-dark-gold">And the award goes to... <span>You!</span></DialogTitle>
-            {/* <Description></Description> */}
-            <img ></img>
-            <p></p>
-            <div className="flex gap-4">
-              <button onClick={() => setOpenWinModal(false)}>Cancel</button>
-              <button onClick={() => setOpenWinModal(false)}>Desactivate</button>
+        
+          <DialogPanel className="w-200 h-150 space-y-4 border bg-white p-12">
+            <DialogTitle className="text-oscar-dark-gold text-center text-5xl">And the award goes to...</DialogTitle>
+            <DialogTitle className="text-oscar-dark-gold text-center text-8xl">You!</DialogTitle>
+            <div className='flex gap-2 justify-center mt-15'>
+              <img className="w-40" src={`${chosenMovie.moviePoster}`}></img>
+              <Description className="self-end">
+                <p><span className='font-bold'>Film:</span> {chosenMovie.title}</p>
+                <p><span className='font-bold'>Director:</span> {chosenMovie.director}</p>
+                <p><span className='font-bold'>Year of Release:</span> {chosenMovie.year}</p>
+                <p><span className='font-bold'>Genre:</span> {chosenMovie.genre}</p>
+                <p><span className='font-bold'>Number of Wins:</span> {chosenMovie.wins}</p>
+              </Description>
             </div>
+              
           </DialogPanel>
         </div>
       </Dialog>
@@ -133,7 +139,7 @@ function App() {
   const [moviePosterPath, setMoviePosterPath] = useState(null);
   const [movieGenre, setMovieGenre] = useState(null);
 
-  const [chosenMovie, setChosenMovie] = useState(null);
+  const [chosenMovie, setChosenMovie] = useState({});
 
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -216,14 +222,7 @@ function App() {
 
   console.log(`Chosen Film Id: ${tmdbId}. Title: ${movie}. Director: ${director}. Genre: ${genre}. Year: ${year}. Number of wins: ${wins}. Poster link: ${moviePoster}.`);
 
-  // setChosenMovie({
-  //   title: movie,
-  //   director: director,
-  //   genre: genre,
-  //   year: year,
-  //   wins: wins,
-  //   moviePoster: moviePoster,
-  // });
+ 
 
   const [guessTrigger, setGuessTrigger] = useState(0);
 
@@ -240,7 +239,6 @@ function App() {
     if(userGuess.toLowerCase() === movie.toLowerCase()) {
       console.log("Correct!");
       matchedMovie = {movies: [{tmdb_id: tmdbId}], year};
-      // ADD FUNCTION FOR WIN
     } else {
       matchedMovie = oscarData.find(
         m => m.movies[0].title.toString().toLowerCase() === userGuess.toLowerCase()
@@ -330,6 +328,15 @@ function App() {
   // Gathering info of movie guess.
   useEffect(() => {
     if(!guessTmdbId || !guessCredits || !guessPosterPath || !guessMovieGenre) return;
+
+    setChosenMovie({
+      title: movie,
+      director: director,
+      genre: genre,
+      year: year,
+      wins: wins,
+      moviePoster: moviePoster,
+    });
 
     const guessMovie = oscarData.find(m => m.movies?.[0]?.tmdb_id === guessTmdbId);
 
