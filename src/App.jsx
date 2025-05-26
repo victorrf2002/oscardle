@@ -6,18 +6,18 @@
 import './App.css';
 import oscarData from "./data/oscar-nominations.json";
 import {useEffect, useState} from 'react';
-import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { Description, Dialog, DialogPanel, DialogTitle, DialogBackdrop} from '@headlessui/react';
 
 // Component for Win Modal
 function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
-
   return(
     <>
       {/* <button onClick={() => setOpenWinModal(true)}>Open Dialog</button> */}
       <Dialog open={openWinModal} onClose={() => setOpenWinModal(false)} className="relative z-50">
+      <DialogBackdrop transition className="fixed inset-0 bg-black/80 duration-300 data-closed:opacity-0" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
         
-          <DialogPanel className="w-200 h-150 space-y-4 border bg-white p-12">
+          <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
             <DialogTitle className="text-oscar-dark-gold text-center text-5xl">And the award goes to...</DialogTitle>
             <DialogTitle className="text-oscar-dark-gold text-center text-8xl">You!</DialogTitle>
             <div className='flex gap-2 justify-center mt-15'>
@@ -38,9 +38,66 @@ function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
   )
 }
 
+// Component for Loss Modal
+function LossModal({openLossModal, setOpenLossModal, chosenMovie}) {
+  return(
+    <>
+      {/* <button onClick={() => setOpenWinModal(true)}>Open Dialog</button> */}
+      <Dialog open={openLossModal} onClose={() => setOpenLossModal(false)} className="relative z-50">
+      <DialogBackdrop transition className="fixed inset-0 bg-black/80 duration-300 data-closed:opacity-0" />
+        <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
+        
+          <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
+            <DialogTitle className="text-oscar-red text-center text-5xl">Better luck tomorrow...</DialogTitle>
+            <div className='flex gap-2 justify-center mt-30'>
+              <img className="w-40" src={`${chosenMovie.moviePoster}`}></img>
+              <Description className="self-end">
+                <p><span className='font-bold'>Film:</span> {chosenMovie.title}</p>
+                <p><span className='font-bold'>Director:</span> {chosenMovie.director}</p>
+                <p><span className='font-bold'>Year of Release:</span> {chosenMovie.year}</p>
+                <p><span className='font-bold'>Genre:</span> {chosenMovie.genre}</p>
+                <p><span className='font-bold'>Number of Wins:</span> {chosenMovie.wins}</p>
+              </Description>
+            </div>
+              
+          </DialogPanel>
+        </div>
+      </Dialog>
+    </>
+  )
+}
+
+// Component for Rules Modal
+function RulesModal({openRulesModal, setOpenRulesModal}) {
+  
+
+  return (
+    <>
+      {/* <button onClick={() => setOpenRulesModal(true)}>Open dialog</button> */}
+      <Dialog open={openRulesModal} onClose={() => setOpenRulesModal(false)} className="relative z-50">
+      <DialogBackdrop transition className="fixed inset-0 bg-black/80 data-closed:opacity-0" />
+        <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
+        
+          <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
+            <DialogTitle className="text-oscar-dark-gold text-center text-5xl">How to Play</DialogTitle>
+              <Description className="text-2xl">
+                <p className="mt-10">You have <b>8</b> tries to guess the Oscar nominated movie.</p>
+                <p className="mt-6"><b className='text-oscar-emerald'>Green</b> means it's a correct match for the given columns.</p>
+                <p className="mt-6"><b className='text-oscar-red'>Red</b> means it's wrong.</p>
+                <p className="mt-6"><b className='text-oscar-dark-gold'>Yellow</b> in the <b>Year</b> column means it's within 5 years of the actual release date of the movie.</p>
+                <p className="mt-6"><b className='text-oscar-dark-gold'>Yellow</b> in the <b>Wins</b> column means it's within 3 wins of the actual number of wins the movie has.</p>
+                <p className="mt-6 font-bold">Have fun :)</p>
+              </Description>
+              
+          </DialogPanel>
+        </div>
+      </Dialog>
+    </>
+  )
+}
+
 // Component for the answers rows
 function GuessAnswerRow({guesses}) {
-  
  return(
     <tbody>
       {guesses.toReversed().map((guess, index) => {
@@ -54,20 +111,15 @@ function GuessAnswerRow({guesses}) {
             <td  className={`px-6 py-4 ${guess.status.genre}`} >{guess.genre}</td>
             <td  className={`px-6 py-4 ${guess.status.wins}`} >{guess.wins}</td>
         </tr>
-        ); 
-        
+        );  
       })}
     </tbody>
-
  )
-  
 }
 
 // Component for the category row
 function GuessCategoryRow() {
-
   return(
-        
     <tr>
       <th scope="col" className="w-20"></th>
       <th scope="col" className="px-6 py-3">Title</th>
@@ -82,7 +134,6 @@ function GuessCategoryRow() {
 // Component for the whole Guess table section
 function GuessTable({guesses, status}) {
   return (
-
     <div className="relative overflow-x-auto">
       <table className=" mt-10 w-full text-left rtl:text-right text-lg table-auto ">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
@@ -93,8 +144,6 @@ function GuessTable({guesses, status}) {
       
       </table>
     </div>
-    
-    
   )
 }
 
@@ -122,14 +171,19 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
 
 // Component for header
 function Header() {
+  let [openRulesModal, setOpenRulesModal] = useState(false)
+
   return (
-    <header className="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
+    <>
+      <header className="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
 
-      {/* this is just a placeholder CHANGE AFTER */}
-      <p id='date' className='mb-0'>APRIL 9, 2025</p> 
+        {/* this is just a placeholder CHANGE AFTER */}
+        <p id='date' className='mb-0'>APRIL 9, 2025</p> 
 
-      <button className="bg-oscar-dark-gold px-4 mb-2">HOW TO PLAY</button>
-    </header>
+        <button className="bg-oscar-dark-gold px-4 mb-2" onClick={() => setOpenRulesModal(true)}>HOW TO PLAY</button>
+      </header>
+      <RulesModal openRulesModal={openRulesModal} setOpenRulesModal={setOpenRulesModal}/>
+    </>
   );
 }
 
@@ -227,6 +281,7 @@ function App() {
   const [guessTrigger, setGuessTrigger] = useState(0);
 
   let [openWinModal, setOpenWinModal] = useState(false);
+  let[openLossModal, setOpenLossModal] = useState(false);
 
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess) => {
@@ -353,6 +408,8 @@ function App() {
     // Number of guesses
     if (numberOfGuesses >= 8) {
       console.log("Maximum number of guesses reached.");
+      setGameLoss(true);
+      setOpenLossModal(true);
       return;
     }
 
@@ -406,6 +463,7 @@ function App() {
       <GuessBar onGuessSubmit={handleGuess} numberOfGuesses={numberOfGuesses}/> 
       <GuessTable guesses={guesses}/>
       <WinModal openWinModal={openWinModal} setOpenWinModal={setOpenWinModal} chosenMovie={chosenMovie}/>
+      <LossModal openLossModal={openLossModal} setOpenLossModal={setOpenLossModal} chosenMovie={chosenMovie}/>
     </div>
   );
 }
