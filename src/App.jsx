@@ -19,7 +19,7 @@ function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
           <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
             <DialogTitle className="text-oscar-dark-gold">And the award goes to... <span>You!</span></DialogTitle>
             {/* <Description></Description> */}
-            <img src={`${chosenMovie.moviePoster}`}></img>
+            <img ></img>
             <p></p>
             <div className="flex gap-4">
               <button onClick={() => setOpenWinModal(false)}>Cancel</button>
@@ -199,7 +199,7 @@ function App() {
   const moviePoster = (moviePosterPath?.posters?.length > 0)
                       ? 'https://image.tmdb.org/t/p/original/' + moviePosterPath.posters[0].file_path
                       : null;
-  const genre = (movieGenre) ? movieGenre.genres[0].name : null;
+  const genre = (movieGenre) ? ((movieGenre.genres[0]) ? (movieGenre.genres[0].name) : 'undefined') : null;
 
   // Get number of wins
   function getWins(movie) {
@@ -216,14 +216,14 @@ function App() {
 
   console.log(`Chosen Film Id: ${tmdbId}. Title: ${movie}. Director: ${director}. Genre: ${genre}. Year: ${year}. Number of wins: ${wins}. Poster link: ${moviePoster}.`);
 
-  setChosenMovie({
-    title: movie,
-    director: director,
-    genre: genre,
-    year: year,
-    wins: wins,
-    moviePoster: moviePoster,
-  });
+  // setChosenMovie({
+  //   title: movie,
+  //   director: director,
+  //   genre: genre,
+  //   year: year,
+  //   wins: wins,
+  //   moviePoster: moviePoster,
+  // });
 
   const [guessTrigger, setGuessTrigger] = useState(0);
 
@@ -362,7 +362,7 @@ function App() {
     const guessPoster = (guessPosterPath?.posters?.length > 0)
                         ? 'https://image.tmdb.org/t/p/original/' + guessPosterPath.posters[0].file_path
                         : null;
-    const guessGenre = guessMovieGenre.genres[0].name;
+    const guessGenre = (guessMovieGenre.genres[0]) ? guessMovieGenre.genres[0].name : 'undefined';
     
     console.log("Movie Guess: " + guessTitle + ". ID: " + guessTmdbId + ". Director: " + guessDirector + ". Year: " + guessYear + ". Win: " + guessWins + ". Poster: " + guessPoster + ". Genre: " + guessGenre);
 
