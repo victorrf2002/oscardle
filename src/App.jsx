@@ -18,8 +18,8 @@ function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
         
           <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
-            <DialogTitle className="text-oscar-dark-gold text-center text-5xl">And the award goes to...</DialogTitle>
-            <DialogTitle className="text-oscar-dark-gold text-center text-8xl">You!</DialogTitle>
+            <DialogTitle className="text-oscar-dark-gold text-center sm:text-5xl">And the award goes to...</DialogTitle>
+            <DialogTitle className="text-oscar-dark-gold text-center sm:text-8xl">You!</DialogTitle>
             <div className='flex gap-2 justify-center mt-15'>
               <img className="w-40" src={`${chosenMovie.moviePoster}`}></img>
               <Description className="self-end">
@@ -49,7 +49,7 @@ function LossModal({openLossModal, setOpenLossModal, chosenMovie}) {
         
           <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
             <DialogTitle className="text-oscar-red text-center text-5xl">Better luck tomorrow...</DialogTitle>
-            <div className='flex gap-2 justify-center mt-30'>
+            <div className='flex gap-2 justify-center mt-20 sm:mt-30'>
               <img className="w-40" src={`${chosenMovie.moviePoster}`}></img>
               <Description className="self-end">
                 <p><span className='font-bold'>Film:</span> {chosenMovie.title}</p>
@@ -80,7 +80,7 @@ function RulesModal({openRulesModal, setOpenRulesModal}) {
         
           <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
             <DialogTitle className="text-oscar-dark-gold text-center text-5xl">How to Play</DialogTitle>
-              <Description className="text-2xl">
+              <Description className="sm:text-2xl">
                 <p className="mt-10">You have <b>8</b> tries to guess the Oscar nominated movie.</p>
                 <p className="mt-6"><b className='text-oscar-emerald'>Green</b> means it's a correct match for the given columns.</p>
                 <p className="mt-6"><b className='text-oscar-red'>Red</b> means it's wrong.</p>
@@ -96,55 +96,53 @@ function RulesModal({openRulesModal, setOpenRulesModal}) {
   )
 }
 
-// Component for the answers rows
-function GuessAnswerRow({guesses}) {
- return(
-    <tbody>
-      {guesses.toReversed().map((guess, index) => {
-        return (
-          <tr className=" border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={index}>
-            
-            <td className=""><img src={`${guess.poster}`} className="w-30"></img></td>
-            <td  className={`px-6 py-4 ${guess.status.title}`} >{guess.title}</td>
-            <td  className={`px-6 py-4 ${guess.status.director}`} >{guess.director}</td>
-            <td  className={`px-6 py-4 ${guess.status.year}`} >{guess.year}</td>
-            <td  className={`px-6 py-4 ${guess.status.genre}`} >{guess.genre}</td>
-            <td  className={`px-6 py-4 ${guess.status.wins}`} >{guess.wins}</td>
-        </tr>
-        );  
-      })}
-    </tbody>
- )
-}
-
-// Component for the category row
-function GuessCategoryRow() {
-  return(
-    <tr>
-      <th scope="col" className="w-20"></th>
-      <th scope="col" className="px-6 py-3">Title</th>
-      <th scope="col" className="px-6 py-3">Director</th>
-      <th scope="col" className="px-6 py-3">Year</th>
-      <th scope="col" className="px-6 py-3">Genre</th>
-      <th scope="col" className="px-6 py-3"># of Wins</th>
-    </tr>
-  )
-}
-
-// Component for the whole Guess table section
-function GuessTable({guesses, status}) {
+function GuessAnswerRow({ guesses }) {
   return (
-    <div className="relative overflow-x-auto">
-      <table className=" mt-10 w-full text-left rtl:text-right text-lg table-auto ">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
-          <GuessCategoryRow/>
-        </thead>
+    <tbody>
+      {guesses.toReversed().map((guess, index) => (
+        <tr className="border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={index}>
+          <td className=" w:20 sm:w-30">
+            <img
+              src={`${guess.poster}`}
+              className="w-full h-auto"
+              alt="Poster"
+            />
+          </td>
+          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center truncate text-xs sm:text-base max-w-[50px] sm:max-w-none ${guess.status.title}`}>{guess.title}</td>
+          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.director}`}>{guess.director}</td>
+          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.year}`}>{guess.year}</td>
+          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.genre}`}>{guess.genre}</td>
+          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.wins}`}>{guess.wins}</td>
+        </tr>
+      ))}
+    </tbody>
+  );
+}
 
-        <GuessAnswerRow guesses={guesses} status={status}/>
-      
+function GuessCategoryRow() {
+  return (
+    <tr>
+      <th scope="col" className="w-20 sm:w-30"></th>
+      <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3 text-center">Title</th>
+      <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3 text-center">Director</th>
+      <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3 text-center">Year</th>
+      <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3 text-center">Genre</th>
+      <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3 text-center"># of Wins</th>
+    </tr>
+  );
+}
+
+function GuessTable({ guesses, status }) {
+  return (
+    <div className="mt-10 overflow-x-auto w-full">
+      <table className="w-full text-left text-sm sm:text-base table-auto border-collapse">
+        <thead className="text-xs sm:text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <GuessCategoryRow />
+        </thead>
+        <GuessAnswerRow guesses={guesses} status={status} />
       </table>
     </div>
-  )
+  );
 }
 
 // Component for guess input taking the onGuessSubmit function from App as a prop
@@ -160,10 +158,12 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
   }
 
   return (
-      <form onSubmit={handleSubmit} className="flex flex-row justify-center gap-2.5 mt-10">
-        <h6 className="pr-6 pb-6 pt-6 text-xl" >Guess {numberOfGuesses}/8</h6>
-        <input value={input} onChange={(e) => setInput(e.target.value)} className="border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
-        <button type='submit' className="bg-oscar-light-gold p-6 text-xl">OK</button>
+      <form onSubmit={handleSubmit} className="justify-center gap-2.5 mt-10 sm:flex sm:flex-row">
+        <div className="flex flex-row justify-center">
+          <h6 className="pr-2 sm:pr-6 sm:pb-6 sm:pt-6 sm:text-xl" >Guess {numberOfGuesses}/8</h6>
+          <input value={input} onChange={(e) => setInput(e.target.value)} className="h-12 border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl sm:h-20" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+        </div>
+        <button type='submit' className="bg-oscar-light-gold pl-6 pr-6 sm:p-6 text-lg sm:text-xl mt-3 sm:mt-0 h-12 sm:h-20">OK</button>
       </form>
   )
 
@@ -459,7 +459,7 @@ function App() {
   return (
     <div>
       <Header/>
-      <h1 className="text-oscar-light-gold text-9xl mt-6">OSCARDLE</h1>
+      <h1 className="text-oscar-light-gold text-5xl sm:text-9xl mt-6">OSCARDLE</h1>
       <GuessBar onGuessSubmit={handleGuess} numberOfGuesses={numberOfGuesses}/> 
       <GuessTable guesses={guesses}/>
       <WinModal openWinModal={openWinModal} setOpenWinModal={setOpenWinModal} chosenMovie={chosenMovie}/>
