@@ -171,14 +171,14 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
 
 // Component for header
 function Header() {
-  let [openRulesModal, setOpenRulesModal] = useState(false)
-
+  let [openRulesModal, setOpenRulesModal] = useState(false);
+  const date = new Date().toDateString();
   return (
     <>
       <header className="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
 
         {/* this is just a placeholder CHANGE AFTER */}
-        <p id='date' className='mb-0'>APRIL 9, 2025</p> 
+        <p id='date' className='mb-0'>{date}</p> 
 
         <button className="bg-oscar-dark-gold px-4 mb-2" onClick={() => setOpenRulesModal(true)}>HOW TO PLAY</button>
       </header>
