@@ -18,8 +18,8 @@ function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
         
           <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
-            <DialogTitle className="text-oscar-dark-gold text-center sm:text-5xl">And the award goes to...</DialogTitle>
-            <DialogTitle className="text-oscar-dark-gold text-center sm:text-8xl">You!</DialogTitle>
+            <DialogTitle className="text-oscar-dark-gold text-center text-2xl sm:text-5xl">And the award goes to...</DialogTitle>
+            <DialogTitle className="text-oscar-dark-gold text-center text-5xl sm:text-8xl">You!</DialogTitle>
             <div className='flex gap-2 justify-center mt-15'>
               <img className="w-40" src={`${chosenMovie.moviePoster}`}></img>
               <Description className="self-end">
