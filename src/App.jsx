@@ -199,23 +199,46 @@ function App() {
 
   const arrayLength = oscarData.length;
 
-  // Get today's date and hash it to get random seed
-  function getDateHashIndex(arrayLength) {
-    const today = new Date().toISOString().split('T')[0];
-    // const today = '2025-04-26';
-    let hash = 0;
-
-    for(let i = 0; i < today.length; i++) {
-      hash = today.charCodeAt(i) + ((hash << 5) - hash);
-      hash = hash & hash;
-    }
-      
-    return Math.abs(hash) % arrayLength;
+  // Seedable PRNG
+  function mulberry32(seed) {
+    return function() {
+      let t = seed += 0x6D2B79F5;
+      t = Math.imul(t ^ t >>> 15, t | 1);
+      t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
   }
 
-  const index = getDateHashIndex(oscarData.length);
-  console.log("index: " + index);
-  const randomMovie = oscarData[index]; // getting random oscar nomination from json file given the seed
+  // Use the seedable PRNG to Fisher-Yates shuffle
+  function shuffle(array, seed) {
+    const random = mulberry32(seed);
+    const result = array.slice();
+    for (let i = result.length - 1; i > 0; i--) {
+      const j =  Math.floor(random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  // Combine shuffled number with hashed date
+  function hashString(str) {
+    let hash = 5381;
+    for(let i = 0; i < str.length; i++) {
+      hash = (hash * 33) ^ str.charCodeAt(i);
+    }
+    return hash >>> 0;
+  }
+
+  // Get today's date and hash it to get random seed
+  const today = new Date().toISOString().split('T')[0];
+  // const today = '2025-05-29';
+  const seed = hashString(today);
+  const shuffledData = shuffle(oscarData, seed);
+  const randomMovie = shuffledData[0];
+
+  // const index = getDateHashIndex(oscarData.length);
+  // console.log("index: " + index);
+  // const randomMovie = oscarData[index]; // getting random oscar nomination from json file given the seed
 
   const tmdbId = randomMovie.movies[0].tmdb_id;
   const movie = randomMovie.movies[0].title;
