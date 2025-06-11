@@ -186,45 +186,65 @@ function GuessTable({ guesses, status }) {
 // Component for guess input taking the onGuessSubmit function from App as a prop
 function GuessBar({onGuessSubmit, numberOfGuesses}) {
 
+  // Implementing HeadlessUI's ComboBox for a dropwdown autocomplete search bar.
   const [selectedMovie, setSelectedMovie] = useState(oscarData[0]);
-  const[input, setInput] = useState('');
+  const [input, setInput] = useState('');
 
+  // Remove duplicates from dropwdown
+  const uniqueMovies = Object.values(
+    oscarData.reduce((acc, entry) => {
+      const id = entry.movies[0].tmdb_id;
+      if(!acc[id]) {
+        acc[id] = entry;
+      }
+      return acc;
+    }, {})
+  );
+
+  // Filter through data set depending on what the user is typing.
   const filteredMovies = 
     input === ''
-      ? oscarData
-      : oscarData.filter((movie) => {
+      ? uniqueMovies
+      : uniqueMovies.filter((movie) => {
         return movie.movies[0].title.toLowerCase().includes(input.toLowerCase())
-      })
+  });
 
-  // setting onGuessSubmit as the user's input
   const handleSubmit = (e) => {
     e.preventDefault();
-    onGuessSubmit(input);
-    setInput("");
+    if(selectedMovie) {
+      onGuessSubmit(selectedMovie.movies[0].title);
+      setInput("");
+    }
+    
   }
 
   return (
-      // <form onSubmit={handleSubmit} className="justify-center gap-2.5 mt-10 sm:flex sm:flex-row">
-      //   <div className="flex flex-row justify-center">
-      //     <h6 className="pr-2 sm:pr-6 sm:pb-6 sm:pt-6 sm:text-xl" >Guess {numberOfGuesses}/8</h6>
-      //     <input value={input} onChange={(e) => setInput(e.target.value)} className="h-12 border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl sm:h-20" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
-      //   </div>
-      //   <button type='submit' className="bg-oscar-light-gold pl-6 pr-6 sm:p-6 text-lg sm:text-xl mt-3 sm:mt-0 h-12 sm:h-20">OK</button>
-      // </form>
-      <Combobox value={selectedMovie} onChange={setSelectedMovie} onClose={() => setInput('')}>
-      <ComboboxInput
-        aria-label="Assignee"
-        displayValue={(movie) => movie?.movies[0]?.title ?? ''}
-        onChange={(event) => setInput(event.target.value)}
-      />
-      <ComboboxOptions anchor="bottom" className="border empty:invisible">
-        {filteredMovies.map((movie) => (
-          <ComboboxOption key={movie.movies[0].tmdb_id} value={movie} className="data-focus:bg-blue-100">
-            {movie.movies[0].title}
-          </ComboboxOption>
-        ))}
-      </ComboboxOptions>
-    </Combobox>
+      <form onSubmit={handleSubmit} className="justify-center gap-2.5 mt-10 sm:flex sm:flex-row">
+        <h6 className="pr-2 sm:pr-6 sm:pb-6 sm:pt-6 sm:text-xl" >Guess {numberOfGuesses}/8</h6>
+
+        <Combobox value={selectedMovie} onChange={(movie) => {
+          setSelectedMovie(movie); setInput(movie.movies[0].title);
+        }}>
+        <ComboboxInput
+          className="h-12 border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl sm:h-20 active: outline-none "
+          aria-label="Assignee"
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+          placeholder='Enter movie...'
+          displayValue={() => input}
+          
+          
+        />
+        <ComboboxOptions anchor="bottom" className=" overflow-visible border-1 border-oscar-dark-gold bg-oscar-red p-2 w-2xs text-xl empty:invisible " >
+          {filteredMovies.slice(0, 5).map((movie) => (
+            <ComboboxOption key={`${movie.year} - ${movie.movies[0].tmdb_id}`} value={movie} className="data-focus:bg-oscar-light-gold">
+              {movie.movies[0].title}
+            </ComboboxOption>
+          ))}
+        </ComboboxOptions>
+        </Combobox>
+        <button type='submit' className="bg-oscar-light-gold pl-6 pr-6 sm:p-6 text-lg sm:text-xl mt-3 sm:mt-0 h-12 sm:h-20">OK</button>
+      </form>
   )
 
 }
