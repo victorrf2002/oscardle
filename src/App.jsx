@@ -7,6 +7,44 @@ import './App.css';
 import oscarData from "./data/oscar-nominations.json";
 import {useEffect, useState} from 'react';
 import { Description, Dialog, DialogPanel, DialogTitle, DialogBackdrop} from '@headlessui/react';
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
+
+// const people = [
+//   { id: 1, name: 'Durward Reynolds' },
+//   { id: 2, name: 'Kenton Towne' },
+//   { id: 3, name: 'Therese Wunsch' },
+//   { id: 4, name: 'Benedict Kessler' },
+//   { id: 5, name: 'Katelyn Rohan' },
+// ]
+
+// function Example() {
+//   const [selectedPerson, setSelectedPerson] = useState(people[0])
+//   const [query, setQuery] = useState('')
+
+//   const filteredPeople =
+//     query === ''
+//       ? people
+//       : people.filter((person) => {
+//           return person.name.toLowerCase().includes(query.toLowerCase())
+//         })
+
+//   return (
+//     <Combobox value={selectedPerson} onChange={setSelectedPerson} onClose={() => setQuery('')}>
+//       <ComboboxInput
+//         aria-label="Assignee"
+//         displayValue={(person) => person?.name}
+//         onChange={(event) => setQuery(event.target.value)}
+//       />
+//       <ComboboxOptions anchor="bottom" className="border empty:invisible">
+//         {filteredPeople.map((person) => (
+//           <ComboboxOption key={person.id} value={person} className="data-focus:bg-blue-100">
+//             {person.name}
+//           </ComboboxOption>
+//         ))}
+//       </ComboboxOptions>
+//     </Combobox>
+//   )
+// }
 
 // Component for Win Modal
 function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
@@ -148,7 +186,15 @@ function GuessTable({ guesses, status }) {
 // Component for guess input taking the onGuessSubmit function from App as a prop
 function GuessBar({onGuessSubmit, numberOfGuesses}) {
 
+  const [selectedMovie, setSelectedMovie] = useState(oscarData[0]);
   const[input, setInput] = useState('');
+
+  const filteredMovies = 
+    input === ''
+      ? oscarData
+      : oscarData.filter((movie) => {
+        return movie.movies[0].title.toLowerCase().includes(input.toLowerCase())
+      })
 
   // setting onGuessSubmit as the user's input
   const handleSubmit = (e) => {
@@ -158,13 +204,27 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
   }
 
   return (
-      <form onSubmit={handleSubmit} className="justify-center gap-2.5 mt-10 sm:flex sm:flex-row">
-        <div className="flex flex-row justify-center">
-          <h6 className="pr-2 sm:pr-6 sm:pb-6 sm:pt-6 sm:text-xl" >Guess {numberOfGuesses}/8</h6>
-          <input value={input} onChange={(e) => setInput(e.target.value)} className="h-12 border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl sm:h-20" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
-        </div>
-        <button type='submit' className="bg-oscar-light-gold pl-6 pr-6 sm:p-6 text-lg sm:text-xl mt-3 sm:mt-0 h-12 sm:h-20">OK</button>
-      </form>
+      // <form onSubmit={handleSubmit} className="justify-center gap-2.5 mt-10 sm:flex sm:flex-row">
+      //   <div className="flex flex-row justify-center">
+      //     <h6 className="pr-2 sm:pr-6 sm:pb-6 sm:pt-6 sm:text-xl" >Guess {numberOfGuesses}/8</h6>
+      //     <input value={input} onChange={(e) => setInput(e.target.value)} className="h-12 border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl sm:h-20" name="guess-input" type="text" id="guess-input" required placeholder='Enter movie...'/>
+      //   </div>
+      //   <button type='submit' className="bg-oscar-light-gold pl-6 pr-6 sm:p-6 text-lg sm:text-xl mt-3 sm:mt-0 h-12 sm:h-20">OK</button>
+      // </form>
+      <Combobox value={selectedMovie} onChange={setSelectedMovie} onClose={() => setInput('')}>
+      <ComboboxInput
+        aria-label="Assignee"
+        displayValue={(movie) => movie?.movies[0]?.title ?? ''}
+        onChange={(event) => setInput(event.target.value)}
+      />
+      <ComboboxOptions anchor="bottom" className="border empty:invisible">
+        {filteredMovies.map((movie) => (
+          <ComboboxOption key={movie.movies[0].tmdb_id} value={movie} className="data-focus:bg-blue-100">
+            {movie.movies[0].title}
+          </ComboboxOption>
+        ))}
+      </ComboboxOptions>
+    </Combobox>
   )
 
 }
@@ -482,6 +542,7 @@ function App() {
   return (
     <div>
       <Header/>
+      {/* <Example/> */}
       <h1 className="text-oscar-light-gold text-5xl sm:text-9xl mt-6">OSCARDLE</h1>
       <GuessBar onGuessSubmit={handleGuess} numberOfGuesses={numberOfGuesses}/> 
       <GuessTable guesses={guesses}/>
