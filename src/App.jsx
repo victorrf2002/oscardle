@@ -9,43 +9,6 @@ import {useEffect, useState} from 'react';
 import { Description, Dialog, DialogPanel, DialogTitle, DialogBackdrop} from '@headlessui/react';
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 
-// const people = [
-//   { id: 1, name: 'Durward Reynolds' },
-//   { id: 2, name: 'Kenton Towne' },
-//   { id: 3, name: 'Therese Wunsch' },
-//   { id: 4, name: 'Benedict Kessler' },
-//   { id: 5, name: 'Katelyn Rohan' },
-// ]
-
-// function Example() {
-//   const [selectedPerson, setSelectedPerson] = useState(people[0])
-//   const [query, setQuery] = useState('')
-
-//   const filteredPeople =
-//     query === ''
-//       ? people
-//       : people.filter((person) => {
-//           return person.name.toLowerCase().includes(query.toLowerCase())
-//         })
-
-//   return (
-//     <Combobox value={selectedPerson} onChange={setSelectedPerson} onClose={() => setQuery('')}>
-//       <ComboboxInput
-//         aria-label="Assignee"
-//         displayValue={(person) => person?.name}
-//         onChange={(event) => setQuery(event.target.value)}
-//       />
-//       <ComboboxOptions anchor="bottom" className="border empty:invisible">
-//         {filteredPeople.map((person) => (
-//           <ComboboxOption key={person.id} value={person} className="data-focus:bg-blue-100">
-//             {person.name}
-//           </ComboboxOption>
-//         ))}
-//       </ComboboxOptions>
-//     </Combobox>
-//   )
-// }
-
 // Component for Win Modal
 function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
   return(
@@ -107,7 +70,6 @@ function LossModal({openLossModal, setOpenLossModal, chosenMovie}) {
 
 // Component for Rules Modal
 function RulesModal({openRulesModal, setOpenRulesModal}) {
-  
 
   return (
     <>
@@ -122,7 +84,7 @@ function RulesModal({openRulesModal, setOpenRulesModal}) {
                 <p className="mt-10">You have <b>8</b> tries to guess the Oscar nominated movie.</p>
                 <p className="mt-6"><b className='text-oscar-emerald'>Green</b> means it's a correct match for the given columns.</p>
                 <p className="mt-6"><b className='text-oscar-red'>Red</b> means it's wrong.</p>
-                <p className="mt-6"><b className='text-oscar-dark-gold'>Yellow</b> in the <b>Year</b> column means it's within 5 years of the actual release date of the movie.</p>
+                <p className="mt-6"><b className='text-oscar-dark-gold'>Yellow</b> in the <b>Year</b> column means it's within 10 years of the actual release date of the movie.</p>
                 <p className="mt-6"><b className='text-oscar-dark-gold'>Yellow</b> in the <b>Wins</b> column means it's within 3 wins of the actual number of wins the movie has.</p>
                 <p className="mt-6 font-bold">Have fun :)</p>
               </Description>
@@ -536,7 +498,7 @@ function App() {
     const guessStatus = {
       title: guessTitle === movie ? 'bg-oscar-emerald' : 'bg-oscar-red',
       director: guessDirector === director ? 'bg-oscar-emerald' : 'bg-oscar-red',
-      year: guessYear === year ? 'bg-oscar-emerald' : ((guessYear <= parseInt(year) + 5) && guessYear >= parseInt(year) -5) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
+      year: guessYear === year ? 'bg-oscar-emerald' : ((guessYear <= parseInt(year) + 10) && guessYear >= parseInt(year) -10) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
       genre: guessGenre === genre ? 'bg-oscar-emerald' : 'bg-oscar-red',
       wins: guessWins === wins ? 'bg-oscar-emerald' : ((guessWins <= parseInt(wins) + 3) && (guessWins >= parseInt(wins) - 3)) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
     };
