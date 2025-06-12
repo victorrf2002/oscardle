@@ -201,7 +201,7 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
         <ComboboxOptions anchor="bottom" className=" overflow-visible border-1 border-oscar-dark-gold bg-oscar-red p-2 w-2xs text-xl empty:invisible " >
           {filteredMovies.slice(0, 5).map((movie) => (
             <ComboboxOption key={`${movie.year} - ${movie.movies[0].tmdb_id}`} value={movie} className="data-focus:bg-oscar-light-gold">
-              {movie.movies[0].title}
+              {movie.movies[0].title + ', ' + movie.year}
             </ComboboxOption>
           ))}
         </ComboboxOptions>
