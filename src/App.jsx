@@ -78,7 +78,7 @@ function RulesModal({openRulesModal, setOpenRulesModal}) {
       <DialogBackdrop transition className="fixed inset-0 bg-black/80 data-closed:opacity-0" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
         
-          <DialogPanel className="w-200 h-150 space-y-4 border bg-white rounded-2xl p-12">
+          <DialogPanel className="w-230 h-150 space-y-4 border bg-white rounded-2xl p-12">
             <DialogTitle className="text-oscar-dark-gold text-center text-5xl">How to Play</DialogTitle>
               <Description className="sm:text-2xl">
                 <p className="mt-10">You have <b>8</b> tries to guess the Oscar nominated movie.</p>
@@ -86,7 +86,8 @@ function RulesModal({openRulesModal, setOpenRulesModal}) {
                 <p className="mt-6"><b className='text-oscar-red'>Red</b> means it's wrong.</p>
                 <p className="mt-6"><b className='text-oscar-dark-gold'>Yellow</b> in the <b>Year</b> column means it's within 10 years of the actual release date of the movie.</p>
                 <p className="mt-6"><b className='text-oscar-dark-gold'>Yellow</b> in the <b>Wins</b> column means it's within 3 wins of the actual number of wins the movie has.</p>
-                <p className="mt-6 font-bold">Have fun :)</p>
+                <p className="mt-6"> Up arrow in the <b>Year</b> column means your guess is older. Down arrow if it's newer.</p>
+                <p className="mt-6 pb-6 font-bold">Have fun :)</p>
               </Description>
               
           </DialogPanel>
@@ -110,7 +111,7 @@ function GuessAnswerRow({ guesses }) {
           </td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center truncate text-xs sm:text-base max-w-[50px] sm:max-w-none ${guess.status.title}`}>{guess.title}</td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.director}`}>{guess.director}</td>
-          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.year}`}>{guess.year}</td>
+          <td className={` text-center flex justify-center items-center h-45 flex-row ${guess.status.year}`}><div className="">{guess.year}</div> {guess.status.yearSymbol} </td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.genre}`}>{guess.genre}</td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.wins}`}>{guess.wins}</td>
         </tr>
@@ -132,7 +133,7 @@ function GuessCategoryRow() {
   );
 }
 
-function GuessTable({ guesses, status }) {
+function GuessTable({ guesses, status}) {
   return (
     <div className="mt-10 overflow-x-auto w-full">
       <table className="w-full text-left text-sm sm:text-base table-auto border-collapse">
@@ -278,10 +279,6 @@ function App() {
   const shuffledData = shuffle(oscarData, seed);
   const randomMovie = shuffledData[0];
 
-  // const index = getDateHashIndex(oscarData.length);
-  // console.log("index: " + index);
-  // const randomMovie = oscarData[index]; // getting random oscar nomination from json file given the seed
-
   const tmdbId = randomMovie.movies[0].tmdb_id;
   const movie = randomMovie.movies[0].title;
   const year = randomMovie.year;
@@ -340,8 +337,6 @@ function App() {
   const wins = getWins(movie);
 
   console.log(`Chosen Film Id: ${tmdbId}. Title: ${movie}. Director: ${director}. Genre: ${genre}. Year: ${year}. Number of wins: ${wins}. Poster link: ${moviePoster}.`);
-
- 
 
   const [guessTrigger, setGuessTrigger] = useState(0);
 
@@ -481,7 +476,6 @@ function App() {
     // Check if game is won
     if(gameWon === true) return;
     
-
     setNumberOfGuesses(guesses.length +1);
     console.log("Number of guesses: " + numberOfGuesses + "/8");
 
@@ -499,6 +493,7 @@ function App() {
       title: guessTitle === movie ? 'bg-oscar-emerald' : 'bg-oscar-red',
       director: guessDirector === director ? 'bg-oscar-emerald' : 'bg-oscar-red',
       year: guessYear === year ? 'bg-oscar-emerald' : ((guessYear <= parseInt(year) + 10) && guessYear >= parseInt(year) -10) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
+      yearSymbol: guessYear < parseInt(year) ? <img className="w-6 ml-[10px]" src="src/assets/arrow-up-svgrepo-com.svg" /> : guessYear > parseInt(year) ? <img className='w-6 ml-[10px]' src="src/assets/arrow-down-svgrepo-com.svg" /> : '',
       genre: guessGenre === genre ? 'bg-oscar-emerald' : 'bg-oscar-red',
       wins: guessWins === wins ? 'bg-oscar-emerald' : ((guessWins <= parseInt(wins) + 3) && (guessWins >= parseInt(wins) - 3)) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
     };
