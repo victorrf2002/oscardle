@@ -175,7 +175,7 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if(selectedMovie) {
-      onGuessSubmit(selectedMovie.movies[0].title);
+      onGuessSubmit(selectedMovie.movies[0].title, selectedMovie.year);
       setInput("");
     }
     
@@ -186,7 +186,7 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
         <h6 className="pr-2 sm:pr-6 sm:pb-6 sm:pt-6 sm:text-xl" >Guess {numberOfGuesses}/8</h6>
 
         <Combobox value={selectedMovie} onChange={(movie) => {
-          setSelectedMovie(movie); setInput(movie.movies[0].title);
+          setSelectedMovie(movie); setInput(movie.movies[0].title + ', ' + movie.year);
         }}>
         <ComboboxInput
           className="h-12 border-1 border-oscar-dark-gold bg-oscar-red/50 p-2 w-2xs text-xl sm:h-20 active: outline-none "
@@ -219,8 +219,6 @@ function Header() {
   return (
     <>
       <header className="flex flex-row justify-between border-b-2 pb-2 border-oscar-dark-gold">
-
-        {/* this is just a placeholder CHANGE AFTER */}
         <p id='date' className='mb-0'>{date}</p> 
 
         <button className="bg-oscar-dark-gold px-4 mb-2" onClick={() => setOpenRulesModal(true)}>HOW TO PLAY</button>
@@ -344,19 +342,21 @@ function App() {
   let[openLossModal, setOpenLossModal] = useState(false);
 
   // Handle the user's guess to see if it matches the movie
-  const handleGuess = (userGuess) => {
+  const handleGuess = (userGuess, userYear) => {
     setGuessCredits(null);
     setGuessPosterPath(null);
     setGuessMovieGenre(null);
 
     let matchedMovie = null;
     
-    if(userGuess.toLowerCase() === movie.toLowerCase()) {
+    if(userGuess.toLowerCase() === movie.toLowerCase() && userYear === year) {
       console.log("Correct!");
       matchedMovie = {movies: [{tmdb_id: tmdbId}], year};
     } else {
       matchedMovie = oscarData.find(
-        m => m.movies[0].title.toString().toLowerCase() === userGuess.toLowerCase()
+        m => (m.movies[0].title.toString().toLowerCase() === userGuess.toLowerCase() && 
+          m.year === userYear
+        )
       );
       if (!matchedMovie) {
         console.log("Invalid Guess. Not nominated.");
@@ -458,9 +458,11 @@ function App() {
     if(!guessMovie) return;
 
     const guessTitle = guessMovie.movies[0].title;
+    const guessYear = guessMovie.year;
+
 
     // Skip if the movie was already guessed
-    if (guesses.find(g => g.title.toLowerCase() === guessTitle.toLowerCase())) {
+    if (guesses.find(g => g.title.toLowerCase() === guessTitle.toLowerCase() && g.year === guessYear)) {
       console.log("Duplicate guess. Ignoring.");
       return;
     }
@@ -479,7 +481,6 @@ function App() {
     setNumberOfGuesses(guesses.length +1);
     console.log("Number of guesses: " + numberOfGuesses + "/8");
 
-    const guessYear = guessMovie.year;
     var guessWins = getWins(guessTitle);
     const guessDirector = guessCredits.crew.find(person => person.job === 'Director')?.name;
     const guessPoster = (guessPosterPath?.posters?.length > 0)
