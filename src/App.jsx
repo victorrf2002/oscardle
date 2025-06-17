@@ -8,6 +8,7 @@ import oscarData from "./data/oscar-nominations.json";
 import {useEffect, useState} from 'react';
 import { Description, Dialog, DialogPanel, DialogTitle, DialogBackdrop} from '@headlessui/react';
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
+import { Footer, FooterCopyright, FooterLink, FooterLinkGroup } from "flowbite-react";
 
 // Component for Win Modal
 function WinModal({openWinModal, setOpenWinModal, chosenMovie}) {
@@ -236,6 +237,15 @@ function Header() {
   );
 }
 
+// Footer component using flowbite-react
+export function MyFooter() {
+  return (
+    <Footer container>
+      <a href="">Oscardle v1.0</a>
+      <FooterCopyright href="https://victorrf2002.github.io/" by=" Victor Romano Franca" year={2025} />
+    </Footer>
+  );
+}
 // Main component
 function App() {
   const [movieCredits, setMovieCredits] = useState(null);
@@ -583,6 +593,7 @@ function App() {
       <GuessTable guesses={guesses}/>
       <WinModal openWinModal={openWinModal} setOpenWinModal={setOpenWinModal} chosenMovie={chosenMovie}/>
       <LossModal openLossModal={openLossModal} setOpenLossModal={setOpenLossModal} chosenMovie={chosenMovie}/>
+      <MyFooter/>
     </div>
   );
 }
