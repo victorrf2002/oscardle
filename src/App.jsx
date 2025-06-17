@@ -116,10 +116,10 @@ function GuessAnswerRow({ guesses }) {
           <td className={`text-center flex justify-center items-center h-30 sm:h-45 flex-row ${guess.status.year}`}>
             <div className="h-auto">{guess.year}</div>
             {guess.status.yearSymbol === "up" && (
-              <img className="w-4 sm:w-6 ml-2" src="src/assets/arrow-up-svgrepo-com.svg" />
+              <img className="w-4 sm:w-6 ml-2" src="/arrow-up-svgrepo-com.svg" />
             )}
             {guess.status.yearSymbol === "down" && (
-              <img className='w-4 sm:w-6 ml-2' src="src/assets/arrow-down-svgrepo-com.svg" />
+              <img className='w-4 sm:w-6 ml-2' src="/arrow-down-svgrepo-com.svg" />
             )}
           </td>
           <td className={`px-1 py-2 sm:px-6 sm:py-4 text-center  ${guess.status.genre}`}>{guess.genre}</td>
