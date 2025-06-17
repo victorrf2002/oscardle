@@ -78,7 +78,7 @@ function RulesModal({openRulesModal, setOpenRulesModal}) {
       <DialogBackdrop transition className="fixed inset-0 bg-black/80 data-closed:opacity-0" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4 text-gray-700">
         
-          <DialogPanel className="w-230 h-150 space-y-4 border bg-white rounded-2xl p-12">
+          <DialogPanel className="w-230 h-170 sm:h-150 space-y-4 border bg-white rounded-2xl p-12">
             <DialogTitle className="text-oscar-dark-gold text-center text-5xl">How to Play</DialogTitle>
               <Description className="sm:text-2xl">
                 <p className="mt-10">You have <b>8</b> tries to guess the Oscar nominated movie.</p>
@@ -102,27 +102,27 @@ function GuessAnswerRow({ guesses }) {
     <tbody>
       {guesses.toReversed().map((guess, index) => (
         <tr className="border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={index}>
-          <td className=" w:20 sm:w-30">
+          <td className="w-16 sm:w-20">
             <img
               src={`${guess.poster}`}
-              className="w-full h-auto"
+              className="w-20 h-auto sm:w-full rounded"
               alt="Poster"
             />
           </td>
-          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center truncate text-xs sm:text-base max-w-[50px] sm:max-w-none ${guess.status.title}`}>{guess.title}</td>
-          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.director}`}>{guess.director}</td>
+          <td className={`px-1 py-2 sm:px-6 sm:py-4 text-center truncate text-xs sm:text-base max-w-[50px] sm:max-w-none ${guess.status.title}`}>{guess.title}</td>
+          <td className={`px-1 py-2 sm:px-6 sm:py-4 text-center ${guess.status.director}`}>{guess.director}</td>
           {/* <td className={` text-center flex justify-center items-center h-45 flex-row ${guess.status.year}`}><div className="">{guess.year}</div> {guess.status.yearSymbol} </td> */}
-          <td className={` text-center flex justify-center items-center h-45 flex-row ${guess.status.year}`}>
-            <div className="">{guess.year}</div>
+          <td className={`text-center flex justify-center items-center h-30 sm:h-45 flex-row ${guess.status.year}`}>
+            <div className="h-auto">{guess.year}</div>
             {guess.status.yearSymbol === "up" && (
-              <img className="w-6 ml-[10px]" src="src/assets/arrow-up-svgrepo-com.svg" />
+              <img className="w-4 sm:w-6 ml-2" src="src/assets/arrow-up-svgrepo-com.svg" />
             )}
             {guess.status.yearSymbol === "down" && (
-              <img className='w-6 ml-[10px]' src="src/assets/arrow-down-svgrepo-com.svg" />
+              <img className='w-4 sm:w-6 ml-2' src="src/assets/arrow-down-svgrepo-com.svg" />
             )}
           </td>
-          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.genre}`}>{guess.genre}</td>
-          <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.wins}`}>{guess.wins}</td>
+          <td className={`px-1 py-2 sm:px-6 sm:py-4 text-center  ${guess.status.genre}`}>{guess.genre}</td>
+          <td className={`px-1 py-2 sm:px-6 sm:py-4 text-center ${guess.status.wins}`}>{guess.wins}</td>
         </tr>
       ))}
     </tbody>
@@ -144,8 +144,8 @@ function GuessCategoryRow() {
 
 function GuessTable({ guesses, status}) {
   return (
-    <div className="mt-10 overflow-x-auto w-full">
-      <table className="w-full text-left text-sm sm:text-base table-auto border-collapse">
+    <div className="overflow-x-auto w-full">
+      <table className="w-full min-w-[500px] text-left text-xs sm:text-base table-auto border-collapse">
         <thead className="text-xs sm:text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <GuessCategoryRow />
         </thead>
@@ -214,7 +214,7 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
           ))}
         </ComboboxOptions>
         </Combobox>
-        <button type='submit' className="bg-oscar-light-gold pl-6 pr-6 sm:p-6 text-lg sm:text-xl mt-3 sm:mt-0 h-12 sm:h-20">OK</button>
+        <button type='submit' className="bg-oscar-light-gold mb-5 pl-6 pr-6 sm:p-6 text-lg sm:text-xl mt-3 sm:mt-0 h-12 sm:h-20">OK</button>
       </form>
   )
 
@@ -285,6 +285,17 @@ function App() {
   const shuffledData = shuffle(oscarData, seed);
   const randomMovie = shuffledData[0];
 
+  // Reset localStorage each new day
+  const PUZZLE_DATE_KEY = 'oscardle-puzzle-date';
+  const lastPlayedDate = localStorage.getItem(PUZZLE_DATE_KEY);
+  if(lastPlayedDate !== today) {
+    localStorage.setItem(PUZZLE_DATE_KEY, today);
+    localStorage.removeItem('oscardle-guesses');
+    localStorage.removeItem('oscardle-number-of-guesses');
+    localStorage.removeItem('oscardle-game-won');
+    localStorage.removeItem('oscardle-game-loss');
+  }
+
   const tmdbId = randomMovie.movies[0].tmdb_id;
   const movie = randomMovie.movies[0].title;
   const year = randomMovie.year;
@@ -352,7 +363,7 @@ function App() {
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess, userYear) => {
     if(gameWon || gameLoss) return;
-    
+
     setGuessCredits(null);
     setGuessPosterPath(null);
     setGuessMovieGenre(null);
@@ -564,7 +575,7 @@ function App() {
   }, [guessCredits, guessPosterPath]);
 
   return (
-    <div>
+    <div >
       <Header/>
       {/* <Example/> */}
       <h1 className="text-oscar-light-gold text-5xl sm:text-9xl mt-6">OSCARDLE</h1>
