@@ -111,7 +111,16 @@ function GuessAnswerRow({ guesses }) {
           </td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center truncate text-xs sm:text-base max-w-[50px] sm:max-w-none ${guess.status.title}`}>{guess.title}</td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.director}`}>{guess.director}</td>
-          <td className={` text-center flex justify-center items-center h-45 flex-row ${guess.status.year}`}><div className="">{guess.year}</div> {guess.status.yearSymbol} </td>
+          {/* <td className={` text-center flex justify-center items-center h-45 flex-row ${guess.status.year}`}><div className="">{guess.year}</div> {guess.status.yearSymbol} </td> */}
+          <td className={` text-center flex justify-center items-center h-45 flex-row ${guess.status.year}`}>
+            <div className="">{guess.year}</div>
+            {guess.status.yearSymbol === "up" && (
+              <img className="w-6 ml-[10px]" src="src/assets/arrow-up-svgrepo-com.svg" />
+            )}
+            {guess.status.yearSymbol === "down" && (
+              <img className='w-6 ml-[10px]' src="src/assets/arrow-down-svgrepo-com.svg" />
+            )}
+          </td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.genre}`}>{guess.genre}</td>
           <td className={`px-2 py-2 sm:px-6 sm:py-4 text-center ${guess.status.wins}`}>{guess.wins}</td>
         </tr>
@@ -178,7 +187,6 @@ function GuessBar({onGuessSubmit, numberOfGuesses}) {
       onGuessSubmit(selectedMovie.movies[0].title, selectedMovie.year);
       setInput("");
     }
-    
   }
 
   return (
@@ -343,6 +351,8 @@ function App() {
 
   // Handle the user's guess to see if it matches the movie
   const handleGuess = (userGuess, userYear) => {
+    if(gameWon || gameLoss) return;
+    
     setGuessCredits(null);
     setGuessPosterPath(null);
     setGuessMovieGenre(null);
@@ -432,13 +442,45 @@ function App() {
     fetchGuessMovieGenre();
   }, [guessTmdbId, apiKey, guessTrigger]);
 
-  // Keep track of guesses
-  const [guesses, setGuesses] = useState([]);
-  const [numberOfGuesses, setNumberOfGuesses] = useState(0);
+  // Keep track of guesses and load from localStorage
+  const [guesses, setGuesses] = useState(() => {
+    const saved = localStorage.getItem('oscardle-guesses');
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  // Keep track of win/loss
-  let [gameWon, setGameWon] = useState(false);
-  let [gameLoss, setGameLoss] = useState(false);
+  // Save guesses to localStorage
+  useEffect(() => {
+    localStorage.setItem('oscardle-guesses', JSON.stringify(guesses));
+  }, [guesses]);
+
+  // Keep track of the number of guesses and load from localStorage
+  const [numberOfGuesses, setNumberOfGuesses] = useState(() => {
+    const saved = localStorage.getItem('oscardle-number-of-guesses');
+    return saved ? JSON.parse(saved) : 0;
+  });
+
+  // Save number of guesses made to localStorage
+  useEffect(() => {
+    localStorage.setItem('oscardle-number-of-guesses', JSON.stringify(numberOfGuesses));
+  }, [numberOfGuesses]);
+
+  // Keep track of win/loss and load from localStorage
+  let [gameWon, setGameWon] = useState(() => {
+    const saved = localStorage.getItem('oscardle-game-won');
+    return saved ? JSON.parse(saved) : false;
+  });
+  let [gameLoss, setGameLoss] = useState(() => {
+    const saved = localStorage.getItem('oscardle-game-loss');
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  // Save win/loss states to localStorage
+  useEffect(() => {
+    localStorage.setItem('oscardle-game-won', JSON.stringify(gameWon));
+  }, [gameWon]);
+  useEffect(() => {
+    localStorage.setItem('oscardle-game-loss', JSON.stringify(gameLoss));
+  }, [gameLoss]);
 
   // Gathering info of movie guess.
   useEffect(() => {
@@ -494,7 +536,11 @@ function App() {
       title: guessTitle === movie ? 'bg-oscar-emerald' : 'bg-oscar-red',
       director: guessDirector === director ? 'bg-oscar-emerald' : 'bg-oscar-red',
       year: guessYear === year ? 'bg-oscar-emerald' : ((guessYear <= parseInt(year) + 10) && guessYear >= parseInt(year) -10) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
-      yearSymbol: guessYear < parseInt(year) ? <img className="w-6 ml-[10px]" src="src/assets/arrow-up-svgrepo-com.svg" /> : guessYear > parseInt(year) ? <img className='w-6 ml-[10px]' src="src/assets/arrow-down-svgrepo-com.svg" /> : '',
+      yearSymbol: guessYear < parseInt(year)
+        ? "up"
+        : guessYear > parseInt(year)
+          ? "down"
+          : "",
       genre: guessGenre === genre ? 'bg-oscar-emerald' : 'bg-oscar-red',
       wins: guessWins === wins ? 'bg-oscar-emerald' : ((guessWins <= parseInt(wins) + 3) && (guessWins >= parseInt(wins) - 3)) ? 'bg-oscar-light-gold' : 'bg-oscar-red',
     };
